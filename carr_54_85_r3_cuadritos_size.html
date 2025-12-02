@@ -1,0 +1,2023 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>carr_54_85_r3_cuadritos_size</title>
+
+
+<!--1-->
+
+<!--1.1-->
+<style>
+
+/* 1.1.1 */
+
+  body {margin:0; padding:0; height:100vh; width:100vw; display:flex; background:#ddd; overflow:hidden; font-family:Arial,sans-serif;}
+
+/* 1.1.2 */
+  
+  /* ===== Men� lateral ===== */
+  #menuColDerecha {
+    flex:0 0 180px; background:white; color:#fff; padding:10px; display:flex; flex-direction:column;
+  }
+  #botonesExtraDerecha { margin-top:auto; display:flex; flex-direction:column; gap:8px; }
+
+/* 1.1.3 */
+
+  /* ===== Titulo categor�a ===== */
+#nombreCategoriaMenuDerecha {
+  position: absolute;
+  top: 100px;                /* más arriba */
+  left: 35%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;                /* menos separación entre letras o elementos */
+  overflow-x: auto;
+  white-space: nowrap;
+  padding: 6px 20px;        /* antes 20px → rectángulo mucho más pequeño */
+  width: 20%;               /* menos ancho */
+  max-width: 600px;         /* límite más compacto */
+  background: #ffeb3b;
+  border-radius: 6px;       /* bordes más pequeños */
+  justify-content: center;
+  align-items: center;
+  z-index: 4;
+  font-size: 40px;         /* texto proporcionado */
+  /*font-size: 1.2em;          texto proporcionado */
+  font-weight: bold;
+  box-shadow: 1px 1px 4px rgba(0,0,0,0.2); /* sombra suave */
+}
+
+
+/* 1.1.4 */
+
+  /* ===== Titulo categoria ===== */
+#Empresa {
+  position: absolute;
+  top: 225px;                /* más arriba */
+  left: 55%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;                /* menos separación entre letras o elementos */
+  overflow-x: auto;
+  white-space: nowrap;
+  padding: 6px 20px;        /* antes 20px → rectángulo mucho más pequeño */
+  width: 20%;               /* menos ancho */
+  max-width: 600px;         /* límite más compacto */
+  background: #ffeb3b;
+  border-radius: 6px;       /* bordes más pequeños */
+  justify-content: center;
+  align-items: center;
+  z-index: 4;
+  font-size: 40px;         /* texto proporcionado */
+  /*font-size: 1.2em;          texto proporcionado */
+  font-weight: bold;
+  box-shadow: 1px 1px 4px rgba(0,0,0,0.2); /* sombra suave */
+}
+
+/* 1.1.5 */
+
+  /* ===== Carrusel principal (ovalado) ===== */
+  #carruselAutomatico {
+    position:absolute; top:400px; left:50%; transform:translateX(-50%);
+    width:80%; max-width:1200px; height:320px;
+    perspective:1200px; display:flex; justify-content:center; align-items:center; overflow:visible; z-index:5;
+  }
+  #carruselAutomatico img {
+    position:absolute; width:500px; height:500px; object-fit:cover; border-radius:50%;
+    transition:transform 0.3s linear, opacity 0.3s linear; will-change: transform, opacity;
+  }
+
+
+
+/* 1.1.6 */
+/* ===== Franja de miniaturas centrada abajo ===== */
+#contenedorCarruselDerecha {
+  position: fixed;        /* siempre pegada al body */
+  bottom: 20px;           /* margen inferior */
+  left: 50%;              /* centro horizontal */
+  transform: translateX(-50%);
+  
+  display: flex;          /* miniaturas en fila */
+  gap: 10px;              /* separación entre miniaturas */
+  padding: 10px 15px;
+  
+  max-width: 90%;         /* no se sale de la pantalla */
+  background: #ccc;
+  border-radius: 12px;
+  
+  justify-content: center;
+  align-items: center;
+  
+  overflow-x: auto;       /* scroll horizontal si hay muchas miniaturas */
+  white-space: nowrap;
+  
+  z-index: 9999;          /* siempre encima */
+}
+
+/* Scroll estético simple */
+#contenedorCarruselDerecha::-webkit-scrollbar {
+  height: 6px;
+}
+#contenedorCarruselDerecha::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.3);
+  border-radius: 3px;
+}
+
+
+
+/* 1.1.7 */
+
+  /* ===== Bot�n Ropa 1 discreto ===== */
+  #btnMostrarRopa1 {
+    position:fixed; bottom:10px; right:10px;
+    background:#ff9800; color:#fff; border:none; border-radius:10px;
+    padding:8px 14px; cursor:pointer; z-index:9999; opacity:0.2;
+    transition:opacity 0.3s, transform 0.2s; font-size:16px;
+  }
+</style>
+
+
+
+<!--1.2-->
+<style>
+  /* OCULTAR FRANJA - Botón discreto en la izquierda de la franja */
+  #btnToggleFranja {
+    position: absolute;
+    top: 50%; /* centrado vertical respecto a la franja */
+    left: 0;  /* al inicio de la franja */
+    transform: translate(-50%, -50%);
+    width: 30px;
+    height: 30px;
+    background: #ff9800;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    z-index: 9999;
+    opacity: 0.3;
+    transition: transform 0.2s, opacity 0.3s;
+  }
+  #btnToggleFranja:hover {
+    transform: translate(-50%, -50%) scale(1.1);
+    opacity: 0.7;
+  }
+</style>
+
+<!--1.3-->
+<button id="btnToggleFranja" title="Mostrar/Ocultar franja"></button>
+
+<!--1.4-->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const btnFranja = document.getElementById("btnToggleFranja");
+  const franja = document.getElementById("contenedorCarruselDerecha");
+
+  btnFranja.addEventListener("click", () => {
+    if (!franja) return;
+    const visible = franja.style.display !== "none";
+    franja.style.display = visible ? "none" : "flex";
+  });
+});
+</script>
+
+
+
+<!--1.5.1-->
+<style>
+/* SCROLL EN MENÚ DE CATEGORÍAS */
+/* Este bloque evita que los botones inferiores desaparezcan */
+/* cuando el número de categorías excede 20.                 */
+
+#menuColDerecha {
+  flex: 0 0 180px;
+  background: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 5px;
+  border-right: 2px solid #ccc;
+
+  /* --- MEJORA FUNCIONAL --- */
+  overflow-y: auto;       /* Activa desplazamiento vertical */
+  max-height: 100vh;      /* Limita el tamaño al alto de pantalla */
+  scrollbar-width: thin;  /* Barra de scroll delgada */
+}
+
+/* --- OPCIONAL (efecto suave de scroll) --- */
+#menuColDerecha::-webkit-scrollbar {
+  width: 6px;
+}
+
+#menuColDerecha::-webkit-scrollbar-thumb {
+  background-color: rgba(0,0,0,0.3);
+  border-radius: 3px;
+}
+</style>
+
+
+
+<!--1.5,2-->
+<!-- CONTROL DE SCROLL AUTOMÁTICO EN MENÚ DE CATEGORÍAS -->
+
+<script>
+/*========================================================
+=               DATA DIVISION - CONFIGURACIÓN             =
+========================================================*/
+document.addEventListener("DOMContentLoaded", () => {
+
+  const LIMITE_SCROLL = 20; // Número máximo visible antes de activar scroll
+  const ID_MENU = "menuColDerecha";
+  const CLAVE_LOCAL_CATS = "categoriasIniciales";
+
+  /*========================================================
+  =               PROCEDURE DIVISION - LÓGICA               =
+  ========================================================*/
+
+  function aplicarScrollSegunCantidad() {
+    const menu = document.getElementById(ID_MENU);
+    if (!menu) return;
+
+    const categorias = JSON.parse(localStorage.getItem(CLAVE_LOCAL_CATS)) || [];
+    const cantidad = categorias.length;
+
+    // --- Evaluación ---
+    if (cantidad > LIMITE_SCROLL) {
+      menu.style.overflowY = "auto";
+      menu.style.maxHeight = "100vh";
+      menu.style.scrollbarWidth = "thin";
+      console.log(`Scroll ACTIVADO (${cantidad} categorías)`);
+    } else {
+      menu.style.overflowY = "visible";
+      menu.style.maxHeight = "none";
+      console.log(`Scroll DESACTIVADO (${cantidad} categorías)`);
+    }
+  }
+
+  /*========================================================
+  =               EVENTO PRINCIPAL                         =
+  ========================================================*/
+  // Aplicar al cargar página
+  aplicarScrollSegunCantidad();
+
+  // Reaplicar cada vez que cambien las categorías
+  window.addEventListener("storage", (e) => {
+    if (e.key === CLAVE_LOCAL_CATS) aplicarScrollSegunCantidad();
+  });
+});
+</script>
+
+
+</head>
+
+
+
+
+<!--2-->
+<body>
+
+<!--2.1-->
+  <!-- Menu lateral -->
+  <div id="menuColDerecha">
+    <div id="botonesExtraDerecha"></div>
+  </div>
+
+<!--2.2-->
+  <!-- Zona principal -->
+  <div style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center;">
+    <h2 id="nombreCategoriaMenuDerecha">Category</h2>
+    <div id="carruselAutomatico"></div>
+    <div id="contenedorCarruselDerecha"></div>
+  </div>
+
+
+
+
+<!--2.3-->
+  <!-- Empresa - FUERA DE BODY --> 
+  <div style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center;">
+<!--
+<input 
+  id="Empresa" 
+  type="text" 
+  placeholder="Name 111 empresa..." 
+  style="
+    position: absolute;
+    top: 900px;
+    left: 40%;
+    transform: translateX(-50%);
+    width: 20%;
+    max-width: 600px;
+    padding: 10px 20px;
+    font-size: 28px;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 6px;
+    border: 2px solid #ffeb3b;
+    background: #fff9c4;
+    box-shadow: 1px 1px 4px rgba(0,0,0,0.2);
+    outline: none;
+    z-index: 4;
+  "
+>
+-->
+    <div id="carruselAutomatico"></div>
+    <div id="contenedorCarruselDerecha"></div>
+  </div>
+
+
+
+
+<!--3-->
+<script>
+
+//3.1
+document.addEventListener("DOMContentLoaded", () => {
+
+
+//3.2
+
+  // ====== Variables principales ======
+// ====== Variables principales ======
+let categoriasIniciales = JSON.parse(localStorage.getItem('categoriasIniciales'));
+
+// Si no existe nada en localStorage, iniciar con arreglo vacío (NO restaurar desde categoriasOriginales)
+if (!categoriasIniciales) {
+  categoriasIniciales = [];
+  localStorage.setItem('categoriasIniciales', JSON.stringify(categoriasIniciales));
+}
+
+let indiceCategoria = 0;
+let tiempoMenu = parseInt(localStorage.getItem('tiempoRotacion')) || 3000;
+let velocidadCarrusel = parseFloat(localStorage.getItem('velocidadCarrusel')) || 1;
+let intervaloCategorias;
+
+const menuColDerecha = document.getElementById('menuColDerecha');
+const botonesExtraDerecha = document.getElementById('botonesExtraDerecha');
+const nombreCategoriaElem = document.getElementById('nombreCategoriaMenuDerecha');
+const contenedorCarrusel = document.getElementById('contenedorCarruselDerecha');
+const carruselAutomatico = document.getElementById('carruselAutomatico');
+
+//3.3
+
+  // ====== Men� lateral de categor�as ======
+  categoriasIniciales.forEach((cat, idx)=>{
+    const btn=document.createElement('button');
+    btn.textContent=cat.nombre;
+    btn.style.cssText="display:block;width:100%;font-size:20px;margin:5px 0;padding:10px;background:#007bff;color:#fff;border:none;border-radius:4px;cursor:pointer;";
+    btn.addEventListener('click',()=>{ indiceCategoria=idx; mostrarCategoria(); });
+    menuColDerecha.insertBefore(btn, botonesExtraDerecha);
+  });
+
+
+//3.4
+
+  // ====== Botones extra ======
+
+//3.4.1
+
+  const btnSubirImg=document.createElement("button");
+  btnSubirImg.textContent="Subir img";
+  btnSubirImg.style.cssText="padding:6px;background:#28a745;color:#fff;border:none;border-radius:4px;cursor:pointer;font-size:20px;";
+
+//3.4.2
+
+  const contTiempo=document.createElement("div");
+  contTiempo.style.cssText="display:flex;flex-direction:column;align-items:center;gap:4px;background:#ff9800;border-radius:6px;padding:6px;font-size:18px;";
+  const textoTiempo=document.createElement("div");
+  textoTiempo.style.cssText="color:black;font-weight:bold;";
+  const flechaArriba=document.createElement("button");
+  const flechaAbajo=document.createElement("button");
+  [flechaArriba,flechaAbajo].forEach(b=>{ b.style.cssText="width:100%;border:none;background:#fff;color:#ff9800;font-size:16px;border-radius:4px;cursor:pointer;"; });
+  flechaArriba.textContent = "▲";
+  flechaAbajo.textContent = "▼";
+  //flechaArriba.textContent="ʌ"; flechaAbajo.textContent="˅";
+  contTiempo.append(flechaArriba,textoTiempo,flechaAbajo);
+
+
+//3.4.3
+
+  const btnVelocidad=document.createElement("button");
+  btnVelocidad.textContent="Velocidad";
+  btnVelocidad.style.cssText="padding:6px;background:#673ab7;color:#fff;border:none;border-radius:4px;cursor:pointer;font-size:20px;";
+
+  botonesExtraDerecha.append(btnSubirImg,contTiempo,btnVelocidad);
+
+//3.4.4
+
+  // ====== Subir imagen ======
+  btnSubirImg.addEventListener("click",()=>{
+    const input=document.createElement("input");
+    input.type="file"; input.accept="image/*"; input.multiple=true;
+    input.onchange=e=>{
+      Array.from(e.target.files).forEach(f=>{
+        const fr=new FileReader();
+        fr.onload=ev=>{
+          categoriasIniciales[indiceCategoria].imagenes.push(ev.target.result);
+          localStorage.setItem('categoriasIniciales',JSON.stringify(categoriasIniciales));
+          mostrarCategoria();
+        };
+        fr.readAsDataURL(f);
+      });
+    };
+    input.click();
+  });
+
+
+//3.4.5
+
+  // ====== Control tiempo ======
+  function reiniciarIntervaloMenu(){
+    clearInterval(intervaloCategorias);
+    intervaloCategorias=setInterval(()=>{
+      indiceCategoria=(indiceCategoria+1)%categoriasIniciales.length;
+      mostrarCategoria();
+    }, tiempoMenu);
+    localStorage.setItem('tiempoRotacion',tiempoMenu);
+  }
+  flechaArriba.addEventListener("click",()=>{ tiempoMenu=Math.min(tiempoMenu+5000,90000); textoTiempo.textContent=`Tiempo: ${(tiempoMenu/1000).toFixed(1)}s`; reiniciarIntervaloMenu(); });
+  flechaAbajo.addEventListener("click",()=>{ tiempoMenu=Math.max(tiempoMenu-5000,5000); textoTiempo.textContent=`Tiempo: ${(tiempoMenu/1000).toFixed(1)}s`; reiniciarIntervaloMenu(); });
+
+
+//3.4.6
+
+  // ====== Control velocidad ======
+  btnVelocidad.addEventListener("click",()=>{
+    velocidadCarrusel+=0.2; if(velocidadCarrusel>3) velocidadCarrusel=0.4;
+    localStorage.setItem('velocidadCarrusel',velocidadCarrusel);
+    btnVelocidad.textContent=`Velocidad �${velocidadCarrusel.toFixed(1)}`;
+  });
+
+
+//3.4.7
+
+  // ====== Carrusel ovalado ======
+  function iniciarCarrusel(){
+    carruselAutomatico.innerHTML="";
+    const categoria=categoriasIniciales[indiceCategoria];
+    if(!categoria || !categoria.imagenes || categoria.imagenes.length===0) return;
+
+    const radioX=Math.max(200,(carruselAutomatico.clientWidth/2)-120);
+
+    const radioY=Math.max(120,(carruselAutomatico.clientHeight/2)-40);
+
+    const imgs=[];
+    categoria.imagenes.forEach((url,idx)=>{
+      const img=document.createElement("img");
+      img.src=url; img.className="imgCarrusel"; img.dataset.index=idx; img._hover=false;
+      carruselAutomatico.appendChild(img); imgs.push(img);
+
+      img.addEventListener("mouseenter",()=>{ img._hover=true; window.__ropa3_paused=true; });
+      img.addEventListener("mouseleave",()=>{ img._hover=false; window.__ropa3_paused=false; });
+
+      img.addEventListener("click",()=>{
+        const arr=categoria.imagenes; const i=parseInt(img.dataset.index,10);
+        if(!isNaN(i) && arr[i]){
+          const item=arr.splice(i,1)[0]; arr.unshift(item);
+          localStorage.setItem('categoriasIniciales',JSON.stringify(categoriasIniciales));
+          mostrarCategoria();
+        }
+      });
+    });
+
+    let angulo=0; let ultimo=performance.now(); window.__ropa3_paused=false;
+    function animarOval(now){
+      const delta=(now-ultimo)/1000; ultimo=now;
+      if(!window.__ropa3_paused) angulo+=velocidadCarrusel*60*delta;
+      imgs.forEach((el,i)=>{
+        const fase=(i*360/imgs.length+angulo)*Math.PI/180;
+        const x=Math.cos(fase)*radioX;
+        const y=Math.sin(fase)*radioY*0.7;
+        const z=Math.sin(fase)*80;
+        const baseScale=1+z/400;
+        const hoverExtra=el._hover?1.35:1;
+        const escalaFinal=baseScale*hoverExtra;
+        const op=Math.min(1,Math.max(0.2,0.55+z/200));
+        el.style.transform=`translate3d(${x}px,${y}px,${z}px) scale(${escalaFinal})`;
+        el.style.opacity=op;
+        el.style.zIndex=Math.round(300+z);
+        el.dataset.index=i;
+      });
+      requestAnimationFrame(animarOval);
+    }
+    ultimo=performance.now(); requestAnimationFrame(animarOval);
+  }
+
+
+
+//3.4.8
+
+  // ====== Mostrar categoria ======
+  function mostrarCategoria(){
+    const categoria=categoriasIniciales[indiceCategoria];
+    nombreCategoriaElem.textContent=categoria.nombre;
+
+
+//3.4.9
+// --- Mostrar también el código (codCat) debajo del nombre ---
+const tabla = JSON.parse(localStorage.getItem('tablaExcel')) || [];
+let codigoCat = '(sin código)';
+
+
+//3.4.10
+
+// Intentar buscar coincidencia por nombre
+if (tabla.length > 0) {
+  const filaCat = tabla.find(f =>
+    (f.nameCat || '').trim().toLowerCase() === categoria.nombre.trim().toLowerCase()
+  );
+  if (filaCat && filaCat.codCat !== undefined) {
+    codigoCat = filaCat.codCat;
+  }
+}
+
+
+//3.4.11
+
+// Crear o actualizar el contenedor
+//Codigo 
+let tituloCat = document.getElementById('tituloCategoria');
+if (!tituloCat) {
+  tituloCat = document.createElement('div');
+  tituloCat.id = 'tituloCategoria';
+  tituloCat.style.cssText = `
+    position: fixed;
+    top: 50px;
+    left: 400px;
+    font-family: sans-serif;
+    font-size: 20px;
+    font-weight: bold;
+    color: #000;
+    z-index: 99999;
+    line-height: 1.4;
+    background: rgba(255,255,255,0.7);
+    padding: 5px 10px;
+    border-radius: 8px;
+  `;
+  document.body.appendChild(tituloCat);
+}
+
+
+//3.4.12
+
+// Codigo Categoria mostrar en líneas separadas
+tituloCat.innerHTML = `
+  <!--<div>${categoria.nombre}</div>-->
+  <div style="font-size:36px; color:#333; font-weight:normal;">
+    C ${codigoCat}
+  </div>
+`;
+
+
+
+
+
+//3.4.13
+// Franja miniaturas — SOLO MOSTRAR, SIN ELIMINAR, SIN ARRASTRE, SIN MOUSE
+
+// Limpieza total del contenedor
+while (contenedorCarrusel.firstChild) {
+  contenedorCarrusel.removeChild(contenedorCarrusel.firstChild);
+}
+
+//3.4.13.1
+contenedorCarrusel.innerHTML = "";
+
+categoria.imagenes.forEach((imgSrc, idx) => {
+
+  const wrapper = document.createElement("div");
+  wrapper.style.cssText =
+    "position:relative;width:60px;height:60px;display:inline-block;margin-right:4px;cursor:default;";
+
+  const miniatura = document.createElement("img");
+
+  //3.4.13.2 — convertir a ruta absoluta
+  const abs = document.createElement("a");
+  abs.href = imgSrc;
+  miniatura.src = abs.href;
+
+  //3.4.13.3
+  miniatura.style.cssText =
+    "width:100%;height:100%;object-fit:cover;border-radius:8px;user-select:none;pointer-events:none;cursor:default;";
+
+  // ⚠️ SIN BOTÓN ELIMINAR
+  // ⚠️ SIN EVENTOS DE MOUSE
+  // ⚠️ SIN ARRASTRE
+
+  wrapper.append(miniatura);
+  contenedorCarrusel.appendChild(wrapper);
+});
+
+// Sin iniciar arrastre, no tocamos el carrusel general
+iniciarCarrusel();
+
+
+
+
+
+
+
+//3.4.14
+
+//TIEMPO
+    textoTiempo.textContent=`Tiempo: ${(tiempoMenu/1000).toFixed(1)}s`;
+
+
+//3.4.15
+
+//VELOCIDAD
+    btnVelocidad.textContent=`Velocidad Images ${velocidadCarrusel.toFixed(1)}`;
+  }
+
+  mostrarCategoria();
+  reiniciarIntervaloMenu();
+
+
+//3.4.16
+
+  // ====== Bot�n discreto Ropa1 ======
+  const ropa1=document.getElementById("ropa1")||document.querySelector(".ropa1");
+  if(ropa1){ ropa1.style.display="none"; ropa1.style.opacity="0"; }
+  const btnMostrarRopa1=document.createElement("button"); btnMostrarRopa1.id="btnMostrarRopa1"; btnMostrarRopa1.textContent="Col Menú";
+  btnMostrarRopa1.title="Click o Ctrl+Alt+R para mostrar/ocultar Ropa 1";
+  btnMostrarRopa1.addEventListener("click",()=>{ 
+    if(!ropa1) return;
+    const visible=ropa1.style.display!=="none";
+    ropa1.style.display=visible?"none":"block";
+    ropa1.style.opacity=visible?"0":"1";
+  });
+  btnMostrarRopa1.addEventListener("mouseenter",()=>{ btnMostrarRopa1.style.opacity="1"; btnMostrarRopa1.style.transform="scale(1.05)"; });
+  btnMostrarRopa1.addEventListener("mouseleave",()=>{ btnMostrarRopa1.style.opacity="0.2"; btnMostrarRopa1.style.transform="scale(1)"; });
+  document.body.appendChild(btnMostrarRopa1);
+
+  document.addEventListener("keydown",(e)=>{ if(e.ctrlKey && e.altKey && e.key.toLowerCase()==="r"){ btnMostrarRopa1.click(); } });
+});
+</script>
+
+
+
+
+
+
+
+<!--4-->
+<!-- Botón cámara y cámara funcional -->
+<!-- Cámara independiente -->
+<style>
+  #btnCamara {
+    position: fixed;
+    bottom: 80px; 
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    background: url('https://cdn-icons-png.flaticon.com/512/2920/2920222.png') no-repeat center center;
+    background-size: contain;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 9999;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    transition: transform 0.2s, opacity 0.3s;
+  }
+  #btnCamara:hover { transform: scale(1.1); opacity: 0.9; }
+
+  #videoCamara {
+    position: fixed;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 900px; height: auto; /* video grande para tomar la foto */
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    z-index: 9998;
+    display: none;
+  }
+
+  #fotoCamara {
+    position: fixed;
+    top: 20px; left: 50%;
+    transform: translateX(-50%);
+    width: 300px; height: auto;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    z-index: 9998;
+    display: none;
+  }
+</style>
+
+
+
+
+
+<!--5-->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const ropa1Btn = document.getElementById("btnMostrarRopa1");
+  const colIzq = document.getElementById("menuColDerecha");
+  const zonaPrincipal = colIzq.nextElementSibling; // la zona principal junto a la columna
+
+  ropa1Btn.addEventListener("click", () => {
+    if (!colIzq) return;
+
+    const visible = colIzq.style.display !== "none";
+    colIzq.style.display = visible ? "none" : "flex";
+
+    // Ajustar flex del contenido principal
+    if (zonaPrincipal) zonaPrincipal.style.flex = visible ? "1 1 100%" : "1";
+  });
+});
+</script>
+
+
+
+
+
+
+<!--6-->
+<!--FRANJA - BOTON MOSTRAR / OCULTAR-->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const franja = document.getElementById("contenedorCarruselDerecha");
+  const zonaPrincipal = franja.parentNode; // contenedor de franja y carrusel
+
+  if(!franja) return;
+
+  // Crear zona clicable solo si no existe
+  if(!document.getElementById("zonaClickFranja")){
+    const zonaClick = document.createElement("div");
+    zonaClick.id = "zonaClickFranja";
+    zonaClick.textContent = "x";    //Franja mostrar/ocultar";
+    zonaClick.style.height = "30px";
+    zonaClick.style.backgroundColor = "#555";
+    zonaClick.style.color = "white";
+    zonaClick.style.display = "flex";
+    zonaClick.style.alignItems = "center";
+    zonaClick.style.justifyContent = "center";
+    zonaClick.style.cursor = "pointer";
+    zonaClick.style.fontWeight = "bold";
+    zonaClick.style.userSelect = "none";
+    zonaClick.style.marginBottom = "5px";
+    zonaClick.style.borderRadius = "6px";
+    zonaClick.style.position = "absolute";
+    zonaClick.style.top = (franja.offsetTop - 40) + "px"; // justo arriba de la franja
+    zonaClick.style.left = "15%";
+    zonaClick.style.transform = "translateX(-50%)";
+    zonaClick.style.zIndex = "9999";
+
+    zonaPrincipal.appendChild(zonaClick);
+
+    // Estado visible inicial
+    if(!window.__franjaVisible) window.__franjaVisible = true;
+
+    zonaClick.addEventListener("click", ()=>{
+      window.__franjaVisible = !window.__franjaVisible;
+      franja.style.display = window.__franjaVisible ? "flex" : "none";
+    });
+  }
+
+  // Aplicar estado inicial
+  franja.style.display = window.__franjaVisible ? "flex" : "none";
+});
+</script>
+
+
+
+
+
+
+
+<!--7-->
+<!-- VOICE CAMERA MODULE SOLO VOZ -->
+<div id="voiceCameraModule" aria-live="polite">
+  <style>
+	#vc-video {
+	  position: fixed;
+	  top: 0;
+	  left: 0;
+	  width: 100vw;      /* ancho completo */
+	  height: 100vh;     /* alto completo */
+	  object-fit: cover;  /* mantiene proporción, recorta si es necesario */
+	  border-radius: 0;   /* sin bordes redondeados */
+	  box-shadow: none;   /* sin sombra */
+	  z-index: 10000;
+	  display: none;
+	}
+
+    /* FOTO TOMADA EN CENTRO SUPERIOR */
+    #vc-captured {
+      position: fixed;
+      left: 50%;
+      top: 12px;
+      transform: translateX(-50%);
+      max-width: 40vw;
+      width: 320px;
+      border-radius: 8px;
+      box-shadow: 0 6px 22px rgba(0,0,0,0.45);
+      z-index: 9000;
+      display: none;
+      background: #fff;
+    }
+
+    /* LABEL DE FOTO DEBAJO DE LA IMAGEN */
+    #vc-captured-label {
+      position: fixed;
+      left: 50%;
+      top: calc(12px + 100% + 8px);
+      transform: translateX(-50%);
+      z-index: 10001;
+      color: #111;
+      display: none;
+      font-size: 13px;
+      background: rgba(255,255,255,0.95);
+      padding: 6px 10px;
+      border-radius: 8px;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.2);
+    }
+  </style>
+
+
+<!--8-->
+<!--FOTO TOMADA-->
+  <video id="vc-video" autoplay playsinline muted></video>
+  <img id="vc-captured" alt="Foto tomada por voz" />
+  <div id="vc-captured-label">Foto guardada</div>
+
+
+
+
+
+<!--9-->
+<!--CAMARA CONTROLES--> 
+<script>
+
+//9.1
+    (function(){
+      const videoEl = document.getElementById('vc-video');
+      const capturedImg = document.getElementById('vc-captured');
+      const capturedLabel = document.getElementById('vc-captured-label');
+      const carrusel = document.getElementById('carruselAutomatico'); 
+      const franja = document.getElementById('contenedorCarruselDerecha');
+
+      let stream = null;
+      let recognition = null;
+      let isCameraOn = false;
+
+      async function startCamera() {
+        if (isCameraOn) return;
+        if(carrusel) carrusel.style.display = 'none';
+        if(franja) franja.style.display = 'none';
+
+        try {
+          stream = await navigator.mediaDevices.getUserMedia({ video:{ facingMode:"user" } });
+          videoEl.srcObject = stream;
+          videoEl.style.display = 'block';
+          isCameraOn = true;
+          console.log('Cámara encendida');
+        } catch(e) { console.error(e); }
+      }
+
+
+//9.2
+
+      function stopCamera() {
+        if(!stream) return;
+        if(carrusel) carrusel.style.display = 'flex';
+        if(franja) franja.style.display = 'flex';
+
+        stream.getTracks().forEach(t=>t.stop());
+        stream=null;
+        videoEl.srcObject=null;
+        videoEl.style.display='none';
+        isCameraOn=false;
+        console.log('Cámara apagada');
+      }
+
+//9.3
+
+//FOTO 30s 
+	function takePhotoAndDownload(){
+	  if(!isCameraOn || !videoEl.srcObject){ 
+		console.log('Cámara apagada'); 
+		return; 
+	  }
+	
+	  const track = videoEl.srcObject.getVideoTracks()[0];
+	  const settings = track.getSettings ? track.getSettings() : {};
+	  const w = settings.width || videoEl.videoWidth || 1280;
+	  const h = settings.height || videoEl.videoHeight || 720;
+	
+	  const canvas = document.createElement('canvas');
+	  canvas.width = w;
+	  canvas.height = h;
+	  canvas.getContext('2d').drawImage(videoEl, 0, 0, w, h);
+	
+	  canvas.toBlob(blob => {
+		if(!blob) return;
+
+    const reader = new FileReader();
+    reader.onload = e => {
+
+//9.4
+
+      // Ocultar foto anterior si está visible
+      capturedImg.style.display = 'none';
+      capturedLabel.style.display = 'none';
+
+
+//9.5
+
+      // Mostrar la nueva foto
+      capturedImg.src = e.target.result;
+      capturedImg.style.display = 'block';
+      capturedLabel.style.display = 'block';
+      
+      stopCamera();
+      console.log('Foto tomada (solo vista previa, sin descarga)');
+
+
+//9.6
+
+      // Ocultar automáticamente después de 30 segundos
+      setTimeout(() => {
+        capturedImg.style.display = 'none';
+        capturedLabel.style.display = 'none';
+      }, 30000); // 30 segundos
+    };
+    reader.readAsDataURL(blob);
+  }, 'image/jpeg', 0.92);
+}
+
+  </script>
+</div>
+<!-- FIN VOICE CAMERA MODULE -->
+
+
+
+
+
+<!--10-->
+<!--VOZ CAM CAT-->
+<!-- VOZ CAMERA MODULE + VOZ CATEGORÍAS -->
+<div id="voiceCameraModule" aria-live="polite">
+  <style>
+    #vc-video {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      object-fit: cover;
+      z-index: 10000;
+      display: none;
+    }
+    #vc-captured {
+      position: fixed; left: 50%; top: 12px;
+      transform: translateX(-50%);
+      max-width: 40vw; width: 320px;
+      border-radius: 8px;
+      box-shadow: 0 6px 22px rgba(0,0,0,0.45);
+      z-index: 9000;
+      display: none;
+      background: #fff;
+    }
+    #vc-captured-label {
+      position: fixed; left: 50%;
+      top: calc(12px + 100% + 8px);
+      transform: translateX(-50%);
+      z-index: 10001;
+      color: #111;
+      display: none;
+      font-size: 13px;
+      background: rgba(255,255,255,0.95);
+      padding: 6px 10px;
+      border-radius: 8px;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.2);
+    }
+  </style>
+
+
+
+
+<!--11-->
+  <video id="vc-video" autoplay playsinline muted></video>
+  <img id="vc-captured" alt="Foto tomada por voz" />
+  <div id="vc-captured-label">Foto guardada</div>
+
+
+
+
+<!--12-->
+<!-- VOICE CAMERA MODULE + VOZ CATEGORÍAS -->
+<div id="voiceCameraModule" aria-live="polite">
+  <style>
+    #vc-video {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      object-fit: cover;
+      z-index: 10000;
+      display: none;
+    }
+    #vc-captured {
+      position: fixed; left: 50%; top: 12px;
+      transform: translateX(-50%);
+      max-width: 40vw; width: 320px;
+      border-radius: 8px;
+      box-shadow: 0 6px 22px rgba(0,0,0,0.45);
+      z-index: 9000;
+      display: none;
+      background: #fff;
+    }
+    #vc-captured-label {
+      position: fixed; left: 50%;
+      top: calc(12px + 100% + 8px);
+      transform: translateX(-50%);
+      z-index: 10001;
+      color: #111;
+      display: none;
+      font-size: 13px;
+      background: rgba(255,255,255,0.95);
+      padding: 6px 10px;
+      border-radius: 8px;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.2);
+    }
+  </style>
+
+
+
+<!--13-->
+  <video id="vc-video" autoplay playsinline muted></video>
+  <img id="vc-captured" alt="Foto tomada por voz" />
+  <div id="vc-captured-label">Foto guardada</div>
+
+
+<!--14-->
+  <script>
+  
+//14.1
+  
+    (function(){
+      const videoEl = document.getElementById('vc-video');
+      const capturedImg = document.getElementById('vc-captured');
+      const capturedLabel = document.getElementById('vc-captured-label');
+      const carrusel = document.getElementById('carruselAutomatico'); 
+      const franja = document.getElementById('contenedorCarruselDerecha');
+
+      let stream = null;
+      let recognition = null;
+      let isCameraOn = false;
+      let cameraTimeoutId = null; // temporizador de cierre automático
+
+      // === FUNCIONES DE CÁMARA ===
+      async function startCamera() {
+        if(isCameraOn) return;
+
+        if(carrusel) carrusel.style.display = 'none';
+        if(franja) franja.style.display = 'none';
+
+        try {
+          stream = await navigator.mediaDevices.getUserMedia({ video:{ facingMode:"user" } });
+          videoEl.srcObject = stream;
+          videoEl.style.display = 'block';
+          isCameraOn = true;
+          console.log('Cámara encendida');
+
+          // Temporizador 30s para cerrar automáticamente si no se toma foto
+          cameraTimeoutId = setTimeout(() => {
+            stopCamera();
+            console.log('Cierre automático: no se tomó foto en 30s');
+          }, 30000);
+
+        } catch(e) { console.error(e); }
+      }
+
+
+//14.2
+
+      function stopCamera() {
+        if(!stream) return;
+
+        if(carrusel) carrusel.style.display = 'flex';
+        if(franja) franja.style.display = 'flex';
+
+        stream.getTracks().forEach(t=>t.stop());
+        stream = null;
+        videoEl.srcObject = null;
+        videoEl.style.display = 'none';
+        isCameraOn = false;
+
+        // Limpiar temporizador si existe
+        if(cameraTimeoutId){
+          clearTimeout(cameraTimeoutId);
+          cameraTimeoutId = null;
+        }
+
+        console.log('Cámara apagada');
+      }
+
+
+//14.3
+
+      function takePhotoAndDownload(){
+        if(!isCameraOn || !videoEl.srcObject) return;
+
+        // Cancelar temporizador de cierre automático
+        if(cameraTimeoutId){
+          clearTimeout(cameraTimeoutId);
+          cameraTimeoutId = null;
+        }
+
+        const track = videoEl.srcObject.getVideoTracks()[0];
+        const settings = track.getSettings ? track.getSettings() : {};
+        const w = settings.width || videoEl.videoWidth || 1280;
+        const h = settings.height || videoEl.videoHeight || 720;
+
+        const canvas = document.createElement('canvas');
+        canvas.width = w; canvas.height = h;
+        canvas.getContext('2d').drawImage(videoEl, 0, 0, w, h);
+
+        canvas.toBlob(blob => {
+          if(!blob) return;
+          const reader = new FileReader();
+          reader.onload = e => {
+            // Ocultar foto anterior si está visible
+            capturedImg.style.display = 'none';
+            capturedLabel.style.display = 'none';
+
+            // Mostrar la nueva foto
+            capturedImg.src = e.target.result;
+            capturedImg.style.display = 'block';
+            capturedLabel.style.display = 'block';
+            
+            stopCamera();
+            console.log('Foto tomada correctamente (vista previa)');
+            
+            // Ocultar foto después de 30s
+            setTimeout(() => {
+              capturedImg.style.display = 'none';
+              capturedLabel.style.display = 'none';
+            }, 30000);
+          };
+          reader.readAsDataURL(blob);
+        }, 'image/jpeg', 0.92);
+      }
+
+
+//14.4
+
+      // === EXPONER FUNCIONES GLOBALMENTE PARA RECONOCIMIENTO ===
+      window.startCamera = startCamera;
+      window.stopCamera = stopCamera;
+      window.takePhotoAndDownload = takePhotoAndDownload;
+
+
+//14.5
+
+      // === RECONOCIMIENTO DE VOZ ===
+      const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if(!SR){ console.warn('Reconocimiento de voz no soportado'); return; }
+
+      recognition = new SR();
+      recognition.lang = 'es-ES';
+      recognition.continuous = true;
+      recognition.interimResults = false;
+
+      recognition.onresult = (event) => {
+        const last = event.results[event.results.length - 1];
+        const text = (last[0].transcript || '').trim().toLowerCase();
+        console.log('Voz detectada:', text);
+
+
+//14.6
+
+        // --- 1. Comandos de cámara ---
+        if(text.includes('encender cámara') || text.includes('prender cámara')) startCamera();
+        else if(text.includes('tomar foto') || text.includes('sacar foto') || text.includes('tomar una foto') || text.includes('sacar una foto'))
+            takePhotoAndDownload();
+        else if(text.includes('apagar cámara') || text.includes('cerrar cámara')) stopCamera();
+
+
+//14.7
+
+        // --- 2. Comandos de categorías ---
+        if(window.modoCategorias){
+          const menuDerecho = document.getElementById('menuColDerecha');
+          const botonesCat = menuDerecho.querySelectorAll('button');
+          botonesCat.forEach(boton => {
+            const nombre = boton.textContent.trim().toLowerCase();
+            if(text.includes(nombre)){
+              console.log('Seleccionando categoría:', nombre);
+              boton.click();
+            }
+          });
+        }
+      };
+
+      recognition.onend = () => { try{ recognition.start(); }catch(e){} };
+      try{ recognition.start(); }catch(e){ console.warn('No se pudo iniciar automáticamente', e); }
+
+      // === BOTÓN PARA ACTIVAR MODO CATEGORÍAS ===
+      document.addEventListener("DOMContentLoaded", () => {
+        const menuDerecho = document.getElementById('menuColDerecha');
+        if(!menuDerecho) return;
+
+        const btnVozCategorias = document.createElement('button');
+        btnVozCategorias.textContent = 'Activar Voz Categorías';
+        btnVozCategorias.style.cssText = "margin:5px 0;padding:8px 12px;background:#28a745;color:black;border:none;border-radius:4px;cursor:pointer;font-size:16px;";
+        menuDerecho.insertBefore(btnVozCategorias, menuDerecho.firstChild);
+
+        window.modoCategorias = false;
+
+        btnVozCategorias.addEventListener('click', () => {
+          window.modoCategorias = true;
+          btnVozCategorias.textContent = 'Voz Categorías';
+          btnVozCategorias.style.background = 'yellow';
+          console.log('Modo categorías activado por voz');
+        });
+      });
+
+    })();
+  </script>
+
+
+
+
+<!--15-->
+<script>
+//TRUQUITO CLIC
+document.addEventListener("DOMContentLoaded", () => {
+  const btnVozCategorias = document.querySelector('#menuColDerecha button');
+  if(btnVozCategorias){
+    btnVozCategorias.click();  // simula el clic para activar modoCategorias
+  }
+});
+</script>
+
+ </div>
+</div>
+
+
+
+
+
+
+
+<!--16-->
+<!-- EXCEL - TABLA - CATEGORÍAS BOTONES -->
+
+<!--16.1-->
+<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+
+<!--16.2-->
+<script>
+
+//16.2.1
+document.addEventListener("DOMContentLoaded", () => {
+  const menuDerecho = document.getElementById('menuColDerecha');
+  if(!menuDerecho) return;
+
+  const CLAVE_LOCAL_TABLA = 'tablaExcel';
+  const CLAVE_LOCAL_CATS = 'categoriasIniciales';
+
+//16.2.2
+  // --- Botón subir tabla Excel ---
+  const btnSubir = document.createElement('button');
+  btnSubir.textContent = 'Subir Tabla';
+  btnSubir.style.cssText = "padding:8px 12px;margin:5px;cursor:pointer;";
+  menuDerecho.appendChild(btnSubir);
+
+//16.2.3
+  // --- Input oculto ---
+  const inputExcel = document.createElement('input');
+  inputExcel.type = 'file';
+  inputExcel.accept = '.xlsx';
+  inputExcel.style.display = 'none';
+  menuDerecho.appendChild(inputExcel);
+  btnSubir.addEventListener('click', () => inputExcel.click());
+
+//16.2.4
+  // --- Contenedor para tabla ---
+  const display = document.createElement('div');
+  display.id = 'displayExcel';
+  display.style.cssText = `
+    position: fixed;
+    top: 50px;
+    right: 20px;
+    max-width: 40vw;
+    max-height: 50vh;
+    overflow: auto;
+    background: #fff;
+    border: 2px solid #222;
+    padding: 10px;
+    border-radius: 10px;
+    display: none;  // Aseguramos que la tabla esté oculta al inicio
+    z-index: 9999;
+  `;
+  document.body.appendChild(display);
+
+//16.2.5
+  // --- Botón mostrar/ocultar tabla ---
+  const btnMostrar = document.createElement('button');
+  btnMostrar.textContent = 'Mostrar Tabla';
+  btnMostrar.style.cssText = `
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    color: white;
+	background: lavender;
+    border: 1px solid #888;
+    border-radius: 6px;
+    padding: 4px 8px;
+    cursor: pointer;
+    z-index: 10000;
+    opacity: 0.7;
+  `;
+  document.body.appendChild(btnMostrar);
+
+  btnMostrar.addEventListener('click', () => {
+    const visible = display.style.display === 'block';
+    display.style.display = visible ? 'none' : 'block';
+    btnMostrar.textContent = visible ? 'Mostrar Tabla' : 'Ocultar Tabla';  // Mostrar/Ocultar
+  });
+
+//16.2.6
+  // --- Función para mostrar tabla ---
+  function mostrarTabla(datos){
+    if(!datos || datos.length === 0) return;
+    const columnas = Object.keys(datos[0]);
+    let html = '<table><thead><tr>';
+    columnas.forEach(c => html += `<th>${c}</th>`);
+    html += '</tr></thead><tbody>';
+    datos.forEach(fila => {
+      html += '<tr>';
+      columnas.forEach(c => html += `<td>${fila[c] || ""}</td>`);
+      html += '</tr>';
+    });
+    html += '</tbody></table>';
+    display.innerHTML = html;
+
+    const table = display.querySelector("table");
+    table.style.borderCollapse = "collapse";
+    table.style.width = "100%";
+    table.querySelectorAll("td, th").forEach(cell => {
+      cell.style.border = "1px solid #666";
+      cell.style.padding = "4px 6px";
+    });
+  }
+
+//16.2.7
+  // --- Leer Excel ---
+  inputExcel.addEventListener('change', () => {
+    const archivo = inputExcel.files[0];
+    if(!archivo) return;
+
+    const lector = new FileReader();
+    lector.onload = (e) => {
+      const datos = new Uint8Array(e.target.result);
+      const workbook = XLSX.read(datos, { type: 'array' });
+      const hoja = workbook.Sheets[workbook.SheetNames[0]];
+      const json = XLSX.utils.sheet_to_json(hoja);
+
+//16.2.8
+      // --- Guardar tabla Excel ---
+      localStorage.setItem(CLAVE_LOCAL_TABLA, JSON.stringify(json));
+
+
+
+//16.2.9
+// CATEGORIAS MANTENER - INGRESAR - BORRAR
+// --- Detectar y sincronizar categorías (versión mejorada: conserva imágenes) ---
+
+let categoriasAntiguas = JSON.parse(localStorage.getItem(CLAVE_LOCAL_CATS)) || [];
+let categoriasNuevas = [];
+
+// --- DATA DIVISION ---
+// Extraer nombres de categorías desde la tabla Excel
+json.forEach(fila => {
+  const catNombre = (fila.nameCat || '').toString().trim() || 'SinCategoria';
+  if (!categoriasNuevas.find(n => n.toLowerCase() === catNombre.toLowerCase())) {
+    categoriasNuevas.push(catNombre);
+  }
+});
+
+// --- PROCEDURE DIVISION ---
+// Reglas:
+// 1) Si la categoría EXISTE → mantener objeto completo (incluye imágenes).
+// 2) Si es NUEVA → se crea.
+// 3) Si una antigua no está en la tabla → se elimina.
+
+let categoriasFinales = categoriasNuevas.map(nombre => {
+  const existente = categoriasAntiguas.find(
+    c => (c.nombre || '').toString().trim().toLowerCase() === nombre.toLowerCase()
+  );
+
+  if (existente) {
+    // Asegurar propiedad imagenes
+    if (!Array.isArray(existente.imagenes)) existente.imagenes = [];
+    // Sincronizar el nombre tal cual viene del Excel
+    existente.nombre = nombre;
+    return existente;
+  } else {
+    return { nombre: nombre, imagenes: [] };
+  }
+});
+
+// Guardar categorías sincronizadas
+localStorage.setItem(CLAVE_LOCAL_CATS, JSON.stringify(categoriasFinales));
+
+// Guardar tabla completa ORIGINAL (para el botón PRODUCTOS)
+localStorage.setItem('tablaExcelDuplicar', JSON.stringify(json));
+
+
+
+//16.2.10
+      // --- Mostrar tabla y botones ---
+      mostrarTabla(json);
+      renderCategorias(categoriasFinales);
+      btnMostrar.textContent = 'Mostrar Tabla';   // Cambia el texto del botón a "Mostrar Tabla" después de cargar el contenido
+    };
+    lector.readAsArrayBuffer(archivo);
+  });
+
+//16.2.11
+  // --- Cargar tabla y categorías si existen ---
+  const guardado = localStorage.getItem(CLAVE_LOCAL_TABLA);
+  const catsGuardadas = localStorage.getItem(CLAVE_LOCAL_CATS);
+  if (guardado) {
+    mostrarTabla(JSON.parse(guardado));  // Muestra la tabla si los datos existen
+    display.style.display = 'none';  // Asegura que la tabla esté oculta cuando se carga la página
+    btnMostrar.textContent = 'Mostrar Tabla';    // Asegura que el texto del botón sea "Mostrar Tabla"
+  }
+  if (catsGuardadas) {
+    renderCategorias(JSON.parse(catsGuardadas));
+  }
+
+});
+</script>
+
+
+
+<!--17-->
+<!--URL CARRUSEL OVALADO -->
+
+<!--17.1-->
+
+<style>
+  #panelURLs {
+    position: fixed;
+    top: 200px;
+    left: 300px;
+    width: 400px;
+    height: 200px;
+    background: khaki;
+    color: #fff;
+    padding: 10px;
+    border-radius: 8px;
+    overflow: hidden;
+    z-index: 9900;
+  }
+
+  #panelURLs h3 {
+    margin: 0 0 10px 0;
+    font-size: 18px;
+    text-align: center;
+  }
+
+  #urlCarousel {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    border-radius: 50% / 40%; /* forma ovalada */
+    overflow: hidden;
+  }
+
+  #urlCarousel img {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 50%;
+    top: 30%;
+    left: 20%;
+    margin: -50px 0 0 -50px; /* centrar la imagen */
+    transition: transform 0.5s;
+  }
+</style>
+
+
+<!--17.2-->
+
+<div id="panelURLs">
+  <!--<h3>Images URLs</h3>  TITULO PANEL--> 
+  <div id="urlCarousel"></div>
+</div>
+
+
+<!--17.3-->
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const urls = [
+    "https://picsum.photos/200/200?random=1",
+    "https://picsum.photos/200/200?random=2",
+    "https://picsum.photos/200/200?random=3",
+    "https://picsum.photos/200/200?random=4"
+  ];
+
+  const carousel = document.getElementById("urlCarousel");
+  const images = [];
+
+  // Crear imágenes
+  urls.forEach(url => {
+    const img = document.createElement("img");
+    img.src = url;
+    carousel.appendChild(img);
+    images.push(img);
+  });
+
+  let angle = 0;
+  const radiusX = 150; // ancho del óvalo
+  const radiusY = 60;  // alto del óvalo
+  const centerX = 200; // centro del panel
+  const centerY = 100;
+
+  function rotateCarousel() {
+    const step = (2 * Math.PI) / images.length;
+    images.forEach((img, i) => {
+      const theta = angle + i * step;
+      const x = centerX + radiusX * Math.cos(theta) - 50; // 50 = mitad ancho img
+      const y = centerY + radiusY * Math.sin(theta) - 50;
+      img.style.transform = `translate(${x}px, ${y}px)`;
+    });
+    angle += 0.02; // velocidad de rotación
+    requestAnimationFrame(rotateCarousel);
+  }
+
+  rotateCarousel();
+});
+</script>
+
+
+
+
+
+
+
+
+
+
+
+<!--18-->
+<!--RADIO -->
+
+<!--18.1-->
+
+<!-- BOTÓN PARA MOSTRAR/OCULTAR RADIO -->
+<button id="toggleRadioRopa3">🎵 RADIO</button>
+
+
+<!--18.2-->
+
+<!-- PANEL DE RADIO -->
+<div id="radioPanelRopa3">
+  <audio id="radioPlayerRopa3" controls autoplay></audio>
+  <input id="volumenRopa3" type="range" min="0" max="1" step="0.01" value="0.5">
+
+  <div id="urlSectionRopa3">
+    <input id="urlInputRopa3" type="text" placeholder="Pega aquí tu URL de radio..." />
+    <button id="btnAplicarRopa3">APLICAR 🔊</button>
+  </div>
+
+  <button id="resetBtnRopa3">Search</button>
+  <div id="estadoRopa3">Cargando...</div>
+</div>
+
+
+
+<!--18.3-->
+
+<style>
+  /* BOTÓN MOSTRAR/OCULTAR */
+  #toggleRadioRopa3 {
+    position: fixed;
+    bottom: 20px;
+    right: 320px;
+    background: aliceblue;
+    color: #000;
+    font-weight: bold;
+    font-family: "Courier New", monospace;
+    border: none;
+    border-radius: 12px;
+    padding: 8px 16px;
+    cursor: pointer;
+    box-shadow: 0 0 10px #0f0;
+    z-index: 10000;
+    transition: transform 0.2s;
+  }
+  #toggleRadioRopa3:hover { transform: scale(1.1); }
+
+  /* PANEL DE RADIO */
+  #radioPanelRopa3 {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 280px;
+    padding: 15px;
+    background: rgba(0,0,0,0.9);
+    border: 2px solid #0f0;
+    border-radius: 20px;
+    box-shadow: 0 0 15px #0f0;
+    color: #0f0;
+    font-family: "Courier New", monospace;
+    text-align: center;
+    z-index: 9999;
+  }
+
+  #radioPanelRopa3 audio { width: 100%; outline: none; }
+  #volumenRopa3 { width: 100%; margin-top: 8px; accent-color: #0f0; }
+
+  #urlSectionRopa3 { margin-top: 8px; display: flex; gap: 5px; }
+  #urlInputRopa3 { flex: 1; padding: 4px 6px; border: 1px solid #0f0; background: #000; color: #0f0; border-radius: 6px; font-family: inherit; font-size: 12px; }
+  #btnAplicarRopa3 { background: #0f0; color: #000; border: none; border-radius: 6px; padding: 4px 8px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+  #btnAplicarRopa3:hover { background: #7fff00; }
+
+  #resetBtnRopa3 { margin-top: 10px; background: #f00; border: none; color: #fff; padding: 6px 14px; border-radius: 10px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+  #resetBtnRopa3:hover { background: #ff3333; }
+
+  #estadoRopa3 { margin-top: 6px; font-size: 14px; color: #0ff; }
+  @keyframes parpadeoRopa3 { 0%,100%{opacity:1;}50%{opacity:0.3;} }
+  .parpadeandoRopa3 { animation: parpadeoRopa3 1s infinite; }
+</style>
+
+
+
+<!--18.4-->
+<script>
+
+//18.4.1
+  const radiosRopa3 = [
+    "https://stream-ssl.radios-ar.com:10947/stream",
+    "https://stream-uk1.radioparadise.com/aac-320",
+    "https://icecast.radiofrance.fr/fiprock-hifi.aac",
+    "https://stream-ssl.radios-ar.com:10953/stream",
+    "https://stream-ssl.radios-ar.com:10965/stream",
+    "https://stream-ssl.radios-ar.com:10985/stream",
+    "https://stream-ssl.radios-ar.com:10949/stream",
+    "https://stream-ssl.radios-ar.com:10979/stream",
+    "https://icecast.radiofrance.fr/fipjazz-hifi.aac",
+    "https://stream-ssl.radios-ar.com:10951/stream"
+  ];
+
+  const player = document.getElementById("radioPlayerRopa3");
+  const vol = document.getElementById("volumenRopa3");
+  const btn = document.getElementById("resetBtnRopa3");
+  const estado = document.getElementById("estadoRopa3");
+  const urlInput = document.getElementById("urlInputRopa3");
+  const btnAplicar = document.getElementById("btnAplicarRopa3");
+  const toggleBtn = document.getElementById("toggleRadioRopa3");
+  const panel = document.getElementById("radioPanelRopa3");
+
+  let index = 0;
+
+
+//18.4.2
+
+  function cargarRadio(src = radiosRopa3[index]) {
+    player.src = src;
+    player.play().then(() => {
+      estado.textContent = `🎵 Sonando instrumental #${index + 1} (9/10)`;
+      estado.classList.add("parpadeandoRopa3");
+    }).catch(() => {
+      estado.textContent = "❌ No suena, usa RESET";
+      estado.classList.remove("parpadeandoRopa3");
+    });
+  }
+
+
+//18.4.3
+
+  vol.addEventListener("input", () => player.volume = vol.value);
+  player.addEventListener("error", () => { estado.textContent = "⚠️ Error de conexión"; estado.classList.remove("parpadeandoRopa3"); });
+
+  btn.addEventListener("click", () => { index = (index + 1) % radiosRopa3.length; estado.textContent = "Reintentando otra emisora..."; cargarRadio(); });
+  btnAplicar.addEventListener("click", () => { const url = urlInput.value.trim(); if(url){estado.textContent="Intentando nueva URL...";cargarRadio(url);urlInput.value="";} });
+
+
+//18.4.4
+
+  // BOTÓN RADIO MOSTRAR/OCULTAR
+  toggleBtn.addEventListener("click", () => {
+    if(panel.style.display === "none"){
+      panel.style.display = "block";
+      cargarRadio();
+    } else {
+      panel.style.display = "none";
+      //player.pause();
+    }
+  });
+
+
+//18.4.5
+
+  //  RADIO PANEL Iniciamos oculto
+  panel.style.display = "none";
+</script>
+
+
+
+
+
+
+
+
+<!--19-->
+<!-- CUADRO CATEGORÍAS  BOTÓN "PRODUCTOS" DUPLICA - MOSTRAR/OCULTAR suben de TABLA -->
+<button id="duplicarCatsBtn" style=" 
+  position: fixed; top: 20px; right: 150px; z-index: 1000;
+  padding: 8px 12px; background: lavender; color: #fff; border: none;
+  border-radius: 8px; cursor: pointer;">Productos</button>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  const CLAVE_LOCAL_DUPLICAR = 'tablaExcelDuplicar';
+  let contenedorBody = null;   // Contenedor del cuadro grande
+
+  /* ============================================================
+     PROCEDURE DIVISION – CREAR / MOSTRAR / OCULTAR CUADRO GRANDE
+     ============================================================ */
+  function toggleDuplicarCategorias() {
+    if(!contenedorBody){
+      contenedorBody = document.createElement("div");
+      contenedorBody.id = "duplicadoCategorias";
+      contenedorBody.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(255,255,255,0.95);
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.3);
+        z-index: 5000;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+        align-items: center;
+        overflow: auto;
+      `;
+      document.body.appendChild(contenedorBody);
+    }
+
+    if(contenedorBody.style.display === 'flex'){
+      contenedorBody.style.display = 'none';
+    } else {
+      const copiaCategorias = JSON.parse(localStorage.getItem(CLAVE_LOCAL_DUPLICAR) || "[]");
+
+      if(copiaCategorias.length === 0){
+        contenedorBody.innerHTML = "<p>No hay categorías guardadas para duplicar.</p>";
+      } else {
+        contenedorBody.innerHTML = "";
+        copiaCategorias.forEach((cat, i) => {
+          const btn = document.createElement("button");
+
+          btn.innerHTML = `
+            <div style="font-weight: bold; font-size: 34px;">
+              ${cat.nameCat || cat.nombre || `Categoría ${i+1}`}
+            </div>
+            <div style="font-weight: bold; font-size: 34px; color: red;">
+              ${cat.codCat ? cat.codCat : 'Sin Código'}
+            </div>
+          `;
+
+          btn.style.cssText = `
+            width: 150px;
+            height: 100px;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid #0074D9;
+            background: #f0f8ff;
+            cursor: pointer;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+          `;
+
+          btn.onclick = () =>
+            abrirCarrusel(cat.nameCat || cat.nombre || `Categoría ${i+1}`);
+
+          contenedorBody.appendChild(btn);
+        });
+      }
+
+      contenedorBody.style.display = 'flex';
+    }
+  }
+
+  /* ============================================================
+     PROCEDURE DIVISION – AUTOMÁTICO PRENDER/APAGAR
+     ============================================================ */
+
+  let autoActivo = true;      // ← El automático inicia PRENDIDO
+  let autoTimer = null;
+
+  function iniciarAutomatico(){
+    if(autoTimer) return;     // Ya está corriendo
+    autoTimer = setInterval(() => {
+      toggleDuplicarCategorias();
+    }, 3000);
+  }
+
+  function detenerAutomatico(){
+    clearInterval(autoTimer);
+    autoTimer = null;
+  }
+
+  // Arranque automático al cargar
+  iniciarAutomatico();
+
+  /* ============================================================
+     PROCEDURE DIVISION – BOTÓN PRODUCTOS (SOLO PRENDE/APAGA AUTO)
+     ============================================================ */
+  const btnDuplicar = document.getElementById("duplicarCatsBtn");
+  btnDuplicar.addEventListener("click", () => {
+
+    if(autoActivo){
+      detenerAutomatico();    // APAGA
+      autoActivo = false;
+    } else {
+      iniciarAutomatico();    // PRENDE
+      autoActivo = true;
+    }
+
+  });
+
+});
+</script>
+
+
+
+
+
+
+
+
+
+<!--20-->
+<!-- EMPRESA NOMBRE - INPUT - BOTON mostrar/ocultar -->
+<!-- Casilla de texto con nombre personalizado -->
+<input 
+  id="inputTexto"
+  type="text"
+  placeholder="Empresa..."
+  style="
+    position: fixed;
+    bottom: 200px;
+    right: 40%; 
+    width: 200px;
+    padding: 10px;
+    font-size: 36px;
+    border-radius: 6px;
+    border: 2px solid #ffeb3b;
+    background: #fff9c4;
+    z-index: 6000;
+  "
+>
+
+<script>
+// Recuperar el valor guardado en localStorage al cargar la página
+window.addEventListener("load", () => {
+  const textoGuardado = localStorage.getItem("textoGuardado");
+  const inputTexto = document.getElementById("inputTexto");
+  
+  if (textoGuardado) {
+    inputTexto.value = textoGuardado;  // Cargar el texto guardado al campo
+  }
+});
+
+// Guardar el valor mientras el usuario escribe
+document.getElementById("inputTexto").addEventListener("input", (event) => {
+  localStorage.setItem("textoGuardado", event.target.value);  // Guardar el texto en localStorage
+});
+</script>
+
+
+
+
+
+
+
+
+<!--21-->
+<!--  TUTORIAL - BOTÓN MOSTRAR / OCULTAR -->
+<!-- DATA DIVISION -->
+<style>
+  #btnTutorial {
+    position: fixed;
+    bottom: 50px;
+    right: 20px;
+    padding: 10px 18px;
+    background: lavender;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    z-index: 20000;
+  }
+
+  #tutorialFrame {
+    position: fixed;
+    bottom: 130px;
+    right: 20px;
+    width: 800px;
+    height: 660px;
+    border: 3px solid #0077ff;
+    border-radius: 10px;
+    display: none;
+    z-index: 90000;
+  }
+</style>
+
+<!-- PROCEDURE DIVISION -->
+<button id="btnTutorial">Tutorial</button>
+
+<iframe id="tutorialFrame"
+        src="http://localhost/mi_proyecto/carr_55_r3_dueño_03.html"
+        title="Tutorial">
+</iframe>
+
+<script>
+  // PROCEDURE DIVISION.
+  // --- Mostrar / Ocultar Tutorial ---
+  (function() {
+    const btn = document.getElementById("btnTutorial");
+    const frame = document.getElementById("tutorialFrame");
+
+    btn.addEventListener("click", () => {
+      frame.style.display =
+        frame.style.display === "none" || frame.style.display === ""
+        ? "block"
+        : "none";
+    });
+  })();
+</script>
+
+
+
+
+
+
+
+
+
+<!--22-->
+<!-- RESET SOLO TABLA DE LOCALSTORAGE 
+<button id="resetTablaBtn"
+        style="
+            position: fixed;
+            bottom: 250px;
+            right: 20px;
+            padding: 10px 15px;
+            background: lavender;
+            color: white;
+            font-size: 14px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            z-index: 20000;
+        ">
+   RESET TAB   
+</button>
+-->
+
+<script>
+/*
+document.getElementById("resetTablaBtn").addEventListener("click", function () {
+    const key = "tablaExcel"; // Nombre exacto de la tabla en localStorage
+
+    if (localStorage.getItem(key)) {
+        localStorage.removeItem(key);
+
+        alert("✔️ La tabla Excel almacenada fue eliminada.\n\n" +
+              "El sistema cargará el Excel original en el próximo reinicio.");
+
+        location.reload(); // refresca sin borrar nada más
+    } else {
+        alert("ℹ️ No existe ninguna tabla almacenada en localStorage.");
+    }
+});
+*/
+</script>
+
+
+
+
+<!--23-->
+
+
+
+
+</body>
+</html>
