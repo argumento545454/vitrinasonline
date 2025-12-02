@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title> claves_VitrinasOnline</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: khaki;
+    text-align: center;
+    padding: 50px;
+  }
+  h1, h2, h3 { color: #333; }
+  .form-container {
+    background: #fff;
+    padding: 25px;
+    margin: 20px auto;
+    border-radius: 12px;
+    max-width: 350px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  }
+  input {
+    width: 90%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+  }
+  button {
+    padding: 10px 25px;
+    margin: 10px 5px;
+    border: none;
+    border-radius: 6px;
+    background: #007bff;
+    color: white;
+    font-size: 30px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  button:hover { background: #0056b3; }
+  .message { margin: 10px 0; font-weight: bold; }
+  .message.error { color: red; }
+  .message.success { color: green; }
+</style>
+
+
+<script>
+//logo crear JS
+function crearFavicon() {
+  const canvas = document.createElement('canvas');
+  canvas.width = 64;
+  canvas.height = 64;
+  const ctx = canvas.getContext('2d');
+
+  // Fondo color pestaña
+  ctx.fillStyle = 'yellow'; /*pestaña fondo color  */
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  // Texto VV
+  ctx.fillStyle = 'blue';  /*pestaña letras color  */
+  ctx.font = 'bold 40px Arial';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('VV', canvas.width/2, canvas.height/2);
+
+  // Crear favicon
+  const link = document.createElement('link');
+  link.rel = 'icon';
+  link.href = canvas.toDataURL('image/png');
+  document.head.appendChild(link);
+}
+
+// Ejecutar
+crearFavicon();
+</script>
+</head>
+
+
+<body>
+<h1>VitrinasOnline.com</h1>
+
+<div class="form-container" id="login-container">
+
+  <!--<h2>Ingreso de Usuarios</h2>-->
+  <input type="text" id="username" placeholder="Usuario"><br>
+  <input type="password" id="password" placeholder="Clave"><br>
+
+  <button onClick="login()">Ingresar</button> 
+
+<!--
+  <button onClick="carrusel()">Carrusel</button>
+  <button onClick="galeria()">Galeria</button>
+  <button onClick="vestido()">Vestido</button>
+-->
+
+ 
+  <p id="message" class="message"></p>
+<!-- 
+  <hr style="margin:30px 0;">
+  <p>Register por WhatsApp: 
+    <a href="https://wa.me/593985019054" target="_blank">Enviar mensaje</a>
+  </p>
+-->
+
+</div>
+
+<script>
+  const usuarios = [
+    { u: "", p: "" }, 
+    { u: "vitrinas", p: "1234" },
+    { u: "maria", p: "abcd" },
+    { u: "pepe", p: "pass123" }
+  ];
+
+  function login() {
+    const username = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value.trim();
+    const message = document.getElementById("message");
+
+    const user = usuarios.find(u => u.u === username && u.p === password);
+
+    if (user) {
+      window.location.href = "carr_54_84_r3_cuadritos_size.html";
+    } else {
+      message.textContent = "Usuario o clave incorrecta ❌";
+      message.className = "message error";
+    }
+  }
+
+/*
+  function carrusel() {
+    window.location.href = "carr_54_52_r3_imgURL_ovalado.html";
+  }
+  
+  function galeria() {
+    window.location.href = "carrusel_44_41_galeria_NUMERADO.html";
+  } 
+
+  
+  function vestido() {
+    window.location.href = "d_arrastrar_logo_sobre_Vestido.html";
+  }
+*/
+  
+</script>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
