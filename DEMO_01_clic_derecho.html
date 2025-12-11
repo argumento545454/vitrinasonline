@@ -6,20 +6,54 @@
 <head>
 
 <meta charset="UTF-8">
-<title>DEMO_01_carrusel_50_01_03_clic_derecho</title> 
+<title>DEMO_01_clic_derecho</title> 
+
+
+
+
 
 
 <script>
-  // Bloquear clic derecho sin mostrar alerta
+  // 3  Bloquear clic derecho y otras formas de abrir el menú
+  function bloquearClicDerecho(e) {
+    e = e || window.event;
+
+    // Bloquear clic derecho
+    if (e.button === 2) {
+      e.preventDefault();
+      return false;
+    }
+  }
+
+  // Bloquear menú contextual
   document.addEventListener("contextmenu", function(e) {
-    e.preventDefault(); // Bloquea el menú contextual
+    e.preventDefault();
+  });
+
+  // Bloquear clic derecho con mouse
+  document.addEventListener("mousedown", bloquearClicDerecho);
+
+  // Bloquear clic derecho con teclado (Shift + F10 o menú contextual)
+  document.addEventListener("keydown", function(e) {
+    if ((e.shiftKey && e.key === "F10") || e.key === "ContextMenu") {
+      e.preventDefault();
+    }
   });
 </script>
 
 
 <!--
 <script>
-  // Bloquear clic derecho mostrando alerta
+  // 2  Bloquear clic derecho sin mostrar alerta
+  document.addEventListener("contextmenu", function(e) {
+    e.preventDefault(); // Bloquea el menú contextual
+  });
+</script>
+-->
+
+<!--
+<script>
+  // 1  Bloquear clic derecho mostrando alerta
   document.addEventListener("contextmenu", function(e) {
     alert("Right Click Disabled");
     e.preventDefault(); // Bloquea el menú contextual
