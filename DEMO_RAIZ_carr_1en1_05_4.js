@@ -1,4 +1,4 @@
-// DEMO_RAIZ_carr_1en1_05_4.js - Adaptado para RAÍZ con categoría random al inicio
+// DEMO_RAIZ_carr_1en1_05_4.js - Adaptado para RAÍZ con carrusel aleatorio automático
 
 (function(){
   // --- Usar contenedor de la RAÍZ ---
@@ -73,7 +73,7 @@
   carrusel.style.alignItems = 'center';
   contenido.appendChild(carrusel);
 
-  // --- Franja ---
+  // --- Franja de miniaturas ---
   const franja = document.createElement('div');
   franja.id = 'franja';
   franja.style.display = 'flex';
@@ -205,11 +205,11 @@
     });
   }
 
-  // Primera categoría al cargar: random
-  document.addEventListener('DOMContentLoaded', ()=>{
-    const ids = Object.keys(botonesCategorias);
-    const randomId = ids[Math.floor(Math.random() * ids.length)];
-    document.getElementById(randomId).click();
-  });
+  // --- Selección aleatoria automática al cargar ---
+  const ids = Object.keys(botonesCategorias);
+  const randomId = ids[Math.floor(Math.random() * ids.length)];
+  cargarCategoria(botonesCategorias[randomId]); // carga automática
+  document.querySelectorAll('#menu button').forEach(b=>b.classList.remove('activo'));
+  document.getElementById(randomId).classList.add('activo');
 
 })();
