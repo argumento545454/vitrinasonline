@@ -58,22 +58,29 @@
 <div id="appContainer"></div>
 
 <script>
-document.getElementById("btnStart").addEventListener("click", () => {
-    if(document.getElementById('segmentScript')) return;
+  // Esperar a que el DOM esté cargado
+  window.addEventListener('DOMContentLoaded', () => {
 
-    const script = document.createElement('script');
-    script.src = 'ropa_61.js'; // Cambiar por tu script real
-    script.id = 'segmentScript';
-    script.type = 'text/javascript';
+    const btn = document.getElementById("btnStart");
+    btn.addEventListener("click", () => {
+        // Evitar duplicar script
+        if(document.getElementById('segmentScript')) return;
 
-    document.body.appendChild(script);
+        // Crear script dinámico
+        const script = document.createElement('script');
+        script.src = 'ropa_61.js'; // Cambiar por tu script real
+        script.id = 'segmentScript';
+        script.type = 'text/javascript';
+        document.body.appendChild(script);
 
-    console.log("Script cargado dinámicamente: ropa_61.js");
+        console.log("Script cargado dinámicamente: ropa_61.js");
 
-    // Opcional: ocultar botón después de cargar
-    document.getElementById("btnStart").style.display = "none";
-});
+        // Ocultar botón después de cargar
+        btn.style.display = "none";
+    });
+
+  });
 </script>
 
 </body>
-</html>
+  </html>
