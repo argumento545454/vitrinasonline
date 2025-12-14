@@ -6,7 +6,7 @@ const ropa3HTML = `
 <head>
 
 <meta charset="UTF-8">
-<title>ropa_61.js</title> 
+<title>DEMO_01_carrusel_50_01_02_carr_galeria</title> 
 
 
 
