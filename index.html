@@ -58,29 +58,42 @@
 <div id="appContainer"></div>
 
 <script>
-  // Esperar a que el DOM esté cargado
-  window.addEventListener('DOMContentLoaded', () => {
-
+(function() {
     const btn = document.getElementById("btnStart");
+    if (!btn) {
+        console.error("Botón no encontrado!");
+        return;
+    }
+
     btn.addEventListener("click", () => {
+        console.log("Clic detectado en EJECUTAR PROGRAMA");
+
         // Evitar duplicar script
         if(document.getElementById('segmentScript')) return;
 
         // Crear script dinámico
         const script = document.createElement('script');
-        script.src = 'ropa_61.js'; // Cambiar por tu script real
+        script.src = 'ropa_61.js'; // Cambiar por la ruta correcta
         script.id = 'segmentScript';
         script.type = 'text/javascript';
-        document.body.appendChild(script);
 
-        console.log("Script cargado dinámicamente: ropa_61.js");
+        // Cuando el script termine de cargar, podemos iniciar Ropa3 si existe la función
+        script.onload = () => {
+            console.log("Script cargado dinámicamente: ropa_61.js");
+            if (typeof iniciarRopa3 === 'function') {
+                iniciarRopa3('#appContainer');
+            } else {
+                console.warn("Ropa3 cargado, pero no se encontró la función iniciarRopa3");
+            }
+        };
+
+        document.body.appendChild(script);
 
         // Ocultar botón después de cargar
         btn.style.display = "none";
     });
-
-  });
+})();
 </script>
 
 </body>
-  </html>
+</html>
