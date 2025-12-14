@@ -1,4 +1,4 @@
-// DEMO_RAIZ_carr_1en1_05_4.js - Adaptado para RAÍZ
+// DEMO_RAIZ_carr_1en1_05_4.js - Adaptado para RAÍZ con categoría random al inicio
 
 (function(){
   // --- Usar contenedor de la RAÍZ ---
@@ -205,9 +205,11 @@
     });
   }
 
-  // Primera categoría al cargar
+  // Primera categoría al cargar: random
   document.addEventListener('DOMContentLoaded', ()=>{
-    document.getElementById('btnBlusas').click();
+    const ids = Object.keys(botonesCategorias);
+    const randomId = ids[Math.floor(Math.random() * ids.length)];
+    document.getElementById(randomId).click();
   });
 
 })();
