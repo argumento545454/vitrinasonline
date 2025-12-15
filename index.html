@@ -2,24 +2,15 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>index_html_03_VOnline_imp_ropa3</title>
+<title>index_html_04_VOnline_tutorial</title>
 
 
 <style>
   body { font-family: Arial, sans-serif; text-align: center; margin-top: 20px; }
   button { padding: 10px 20px; font-size: 16px; cursor: pointer; margin: 5px; }
   #msgCarga { color: green; font-weight: bold; margin-top: 20px; }
-  #codigoRopa3 { 
-    text-align: left; 
-    margin: 20px auto; 
-    width: 90%; 
-    background: #f4f4f4; 
-    border: 1px solid #ccc; 
-    padding: 10px; 
-    white-space: pre-wrap; 
-    overflow-x: auto; 
-    max-height: 400px;
-  }
+  #codigoRopa3 { text-align: left; margin: 20px auto; width: 90%; background: #f4f4f4; border: 1px solid #ccc; padding: 10px; white-space: pre-wrap; overflow-x: auto; max-height: 400px; }
+  #pantalla { margin-top: 20px; font-size: 16px; color: #333; border: 1px solid #ccc; padding: 10px; min-height: 50px; width: 90%; margin-left:auto;margin-right:auto; background:#fff; }
 </style>
 </head>
 <body>
@@ -29,9 +20,10 @@
 <button id="btnDemo">Demo</button>
 
 <p id="msgCarga"></p>
-
-<!-- Área para mostrar todo el código de Ropa3 -->
 <pre id="codigoRopa3"></pre>
+
+<!-- Área para mostrar resultados de botones -->
+<div id="pantalla"></div>
 
 <script>
 // 1️⃣ Solicitar Ropa3 desde la misma carpeta
@@ -44,15 +36,14 @@ fetch('carr_54_85_r3_cuadritos_size.html')
   .then(text => {
     ropa3Text = text;
     localStorage.setItem('ropa3', text);
-    
-    // mostrar mensaje en pantalla por 5 segundos
+
+    // mostrar mensaje por 5 segundos
     const msg = document.getElementById('msgCarga');
     msg.textContent = 'Ropa3 cargada correctamente en navegador';
     setTimeout(() => { msg.textContent = ''; }, 5000);
-    
-    // mostrar todo el código en pantalla
+
+    // mostrar todo el código de Ropa3
     document.getElementById('codigoRopa3').textContent = ropa3Text;
-    
     console.log('Ropa3 cargada y mostrada en pantalla');
   })
   .catch(err => {
@@ -60,7 +51,7 @@ fetch('carr_54_85_r3_cuadritos_size.html')
     document.getElementById('msgCarga').textContent = 'Error cargando Ropa3: ' + err.message;
   });
 
-// 2️⃣ Función para ejecutar fragmentos por nombre
+// 2️⃣ Función para ejecutar fragmentos de Ropa3
 function ejecutarFuncion(nombreFuncion){
   if(!ropa3Text){
     console.warn('Ropa3 aún no cargado');
@@ -70,20 +61,32 @@ function ejecutarFuncion(nombreFuncion){
   const match = ropa3Text.match(regex);
   if(match){
     const funcBody = match[1];
-    const func = new Function(funcBody);
-    func();
+    // usamos Function y devolvemos el resultado
+    const func = new Function('return (function(){'+funcBody+'})();');
+    return func();
   } else {
     console.warn('Función', nombreFuncion, 'no encontrada en Ropa3');
+    return null;
   }
 }
 
 // 3️⃣ Eventos de botones
 document.getElementById('btnTutorial').addEventListener('click', () => {
-  ejecutarFuncion('tutorial');
+  const resultado = ejecutarFuncion('tutorial');
+  if(resultado) {
+    document.getElementById('pantalla').textContent = resultado;
+  } else {
+    document.getElementById('pantalla').textContent = 'Tutorial no disponible';
+  }
 });
 
 document.getElementById('btnDemo').addEventListener('click', () => {
-  ejecutarFuncion('demo');
+  const resultado = ejecutarFuncion('demo');
+  if(resultado) {
+    document.getElementById('pantalla').textContent = resultado;
+  } else {
+    document.getElementById('pantalla').textContent = 'Demo no disponible';
+  }
 });
 </script>
 
