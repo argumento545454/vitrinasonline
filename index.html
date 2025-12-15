@@ -2,41 +2,93 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>index_html_06_VOnline_radio</title>
-
-
+<title>index_html_04_VOnline_tutorial</title>
 
 
 <style>
   body { font-family: Arial, sans-serif; text-align: center; margin-top: 20px; }
   button { padding: 10px 20px; font-size: 16px; cursor: pointer; margin: 5px; }
-  #radioContainer { margin-top: 20px; display: none; }
+  #msgCarga { color: green; font-weight: bold; margin-top: 20px; }
+  #codigoRopa3 { text-align: left; margin: 20px auto; width: 90%; background: #f4f4f4; border: 1px solid #ccc; padding: 10px; white-space: pre-wrap; overflow-x: auto; max-height: 400px; }
+  #pantalla { margin-top: 20px; font-size: 16px; color: #333; border: 1px solid #ccc; padding: 10px; min-height: 50px; width: 90%; margin-left:auto;margin-right:auto; background:#fff; }
 </style>
 </head>
 <body>
 
 <h1>Vitrinas Online</h1>
-<button id="btnToggleRadio">Mostrar/Ocultar Radio</button>
+<button id="btnTutorial">Tutorial</button>
+<button id="btnDemo">Demo</button>
 
-<!-- Contenedor de radio -->
-<div id="radioContainer">
-  <audio controls>
-    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
-    Tu navegador no soporta el elemento de audio.
-  </audio>
-</div>
+<p id="msgCarga"></p>
+<pre id="codigoRopa3"></pre>
+
+<!-- Área para mostrar resultados de botones -->
+<div id="pantalla"></div>
 
 <script>
-// Botón para mostrar/ocultar el radio
-document.getElementById('btnToggleRadio').addEventListener('click', () => {
-  const cont = document.getElementById('radioContainer');
-  if (cont.style.display === 'none') {
-    cont.style.display = 'block'; // mostrar el radio
+// 1️⃣ Solicitar Ropa3 desde la misma carpeta
+let ropa3Text = '';
+fetch('carr_54_85_r3_cuadritos_size.html')
+  .then(response => {
+    if (!response.ok) throw new Error('Error al cargar Ropa3: ' + response.status);
+    return response.text();
+  })
+  .then(text => {
+    ropa3Text = text;
+    localStorage.setItem('ropa3', text);
+
+    // mostrar mensaje por 5 segundos
+    const msg = document.getElementById('msgCarga');
+    msg.textContent = 'Ropa3 cargada correctamente en navegador';
+    setTimeout(() => { msg.textContent = ''; }, 5000);
+
+    // mostrar todo el código de Ropa3
+    document.getElementById('codigoRopa3').textContent = ropa3Text;
+    console.log('Ropa3 cargada y mostrada en pantalla');
+  })
+  .catch(err => {
+    console.error(err);
+    document.getElementById('msgCarga').textContent = 'Error cargando Ropa3: ' + err.message;
+  });
+
+// 2️⃣ Función para ejecutar fragmentos de Ropa3
+function ejecutarFuncion(nombreFuncion){
+  if(!ropa3Text){
+    console.warn('Ropa3 aún no cargado');
+    return;
+  }
+  const regex = new RegExp('function\\s+' + nombreFuncion + '\\s*\\(\\)\\s*{([\\s\\S]*?)}');
+  const match = ropa3Text.match(regex);
+  if(match){
+    const funcBody = match[1];
+    // usamos Function y devolvemos el resultado
+    const func = new Function('return (function(){'+funcBody+'})();');
+    return func();
   } else {
-    cont.style.display = 'none'; // ocultar el radio
+    console.warn('Función', nombreFuncion, 'no encontrada en Ropa3');
+    return null;
+  }
+}
+
+// 3️⃣ Eventos de botones
+document.getElementById('btnTutorial').addEventListener('click', () => {
+  const resultado = ejecutarFuncion('tutorial');
+  if(resultado) {
+    document.getElementById('pantalla').textContent = resultado;
+  } else {
+    document.getElementById('pantalla').textContent = 'Tutorial no disponible';
+  }
+});
+
+document.getElementById('btnDemo').addEventListener('click', () => {
+  const resultado = ejecutarFuncion('demo');
+  if(resultado) {
+    document.getElementById('pantalla').textContent = resultado;
+  } else {
+    document.getElementById('pantalla').textContent = 'Demo no disponible';
   }
 });
 </script>
 
 </body>
-</html>
+  </html>
