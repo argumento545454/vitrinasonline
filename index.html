@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>index_html_05_VOnline_tutorial</title>
+<title>index_html_06_VOnline_radio</title>
 
 
 <style>
@@ -18,6 +18,9 @@
     border: 1px solid #ccc; padding: 10px; min-height: 50px; width: 90%; 
     margin-left:auto; margin-right:auto; background:#fff; 
   }
+  /* Estilo para radio */
+  .radio-container { margin-top: 20px; }
+  .radio-label { font-size: 16px; margin-right: 15px; cursor: pointer; }
 </style>
 </head>
 <body>
@@ -25,6 +28,16 @@
 <h1>Vitrinas Online</h1>
 <button id="btnTutorial">Tutorial</button>
 <button id="btnDemo">Demo</button>
+
+<!-- Botón Radio agregado -->
+<div class="radio-container">
+  <label class="radio-label">
+    <input type="radio" name="opcionRopa3" id="radioOpcion1"> Opción 1
+  </label>
+  <label class="radio-label">
+    <input type="radio" name="opcionRopa3" id="radioOpcion2"> Opción 2
+  </label>
+</div>
 
 <p id="msgCarga"></p>
 <pre id="codigoRopa3"></pre>
@@ -70,6 +83,19 @@ document.getElementById('btnTutorial').addEventListener('click', () => {
 
 document.getElementById('btnDemo').addEventListener('click', () => {
   ejecutarFuncion('demo');
+});
+
+// 4️⃣ Eventos para botón radio
+document.getElementById('radioOpcion1').addEventListener('change', () => {
+  if(document.getElementById('radioOpcion1').checked){
+    ejecutarFuncion('radioOpcion1'); // función correspondiente en Ropa3
+  }
+});
+
+document.getElementById('radioOpcion2').addEventListener('change', () => {
+  if(document.getElementById('radioOpcion2').checked){
+    ejecutarFuncion('radioOpcion2'); // función correspondiente en Ropa3
+  }
 });
 </script>
 
