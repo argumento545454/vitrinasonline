@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>index_html_01_VitrinasOnline</title>
+<style>
+  body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
+  button { padding: 10px 20px; font-size: 16px; cursor: pointer; }
+</style>
+</head>
+<body>
+
+<h1>Vitrinas Online</h1>
+<button id="btnTutorial">Tutorial</button>
+
+<script>
+// 1 Solicitar ropa3.html al servidor
+let ropa3Text = ''; // aquí se guardará el texto de ropa3
+fetch('ropa3.html')
+  .then(response => response.text())
+  .then(text => {
+    ropa3Text = text;
+    // opcional: guardar en localStorage para reutilizar
+    localStorage.setItem('ropa3', text);
+  });
+
+// 2 Ejecutar fragmentos bajo demanda
+document.getElementById('btnTutorial').addEventListener('click', () => {
+  // buscar la función correspondiente dentro de ropa3Text
+  // ejemplo: function tutorial() { ... } dentro del texto
+  const functionMatch = ropa3Text.match(/function\s+tutorial\s*\(\)\s*{([\s\S]*?)}/);
+  if(functionMatch){
+    const funcBody = functionMatch[1];
+    // compilar y ejecutar la función
+    const tutorialFunc = new Function(funcBody);
+    tutorialFunc();
+  } else {
+    console.warn('Función tutorial no encontrada en Ropa3');
+  }
+});
+</script>
+
+</body>
+</html>
