@@ -6,6 +6,7 @@
 
 
 
+
 <style>
   body { font-family: Arial, sans-serif; text-align: center; margin-top: 20px; }
   button { padding: 10px 20px; font-size: 16px; cursor: pointer; margin: 5px; }
@@ -19,8 +20,7 @@
     border: 1px solid #ccc; padding: 10px; min-height: 50px; width: 90%; 
     margin-left:auto; margin-right:auto; background:#fff; 
   }
-  .radio-container { margin-top: 20px; }
-  .radio-label { font-size: 16px; margin-right: 15px; cursor: pointer; }
+  .radio-container { margin-top: 20px; display: none; } /* inicialmente oculto */
 </style>
 </head>
 <body>
@@ -28,15 +28,11 @@
 <h1>Vitrinas Online</h1>
 <button id="btnTutorial">Tutorial</button>
 <button id="btnDemo">Demo</button>
+<button id="btnToggleRadio">Mostrar/Ocultar Radio</button>
 
-<!-- Botón Radio agregado -->
-<div class="radio-container">
-  <label class="radio-label">
-    <input type="radio" name="opcionRopa3" id="radio1"> Opción Radio 1
-  </label>
-  <label class="radio-label">
-    <input type="radio" name="opcionRopa3" id="radio2"> Opción Radio 2
-  </label>
+<!-- Contenedor de radio, que se mostrará u ocultará -->
+<div class="radio-container" id="radioContainer">
+  <p>Contenido del Radio (Ropa3)</p>
 </div>
 
 <p id="msgCarga"></p>
@@ -60,7 +56,6 @@ function ejecutarFuncion(nombreFuncion){
     return;
   }
 
-  // Creamos un Function que define todo Ropa3 en memoria y ejecuta la función solicitada
   const funcScript = `
     const pantallaDiv = document.getElementById('pantalla');
     ${ropa3Text}
@@ -82,26 +77,23 @@ function ejecutarFuncion(nombreFuncion){
 
 // 3️⃣ Botones Tutorial y Demo
 document.getElementById('btnTutorial').addEventListener('click', () => {
-  ejecutarFuncion('tutorial'); // usamos el nombre real de la función tutorial en Ropa3
+  ejecutarFuncion('tutorial');
 });
 
 document.getElementById('btnDemo').addEventListener('click', () => {
-  ejecutarFuncion('demo'); // usamos el nombre real de la función demo en Ropa3
+  ejecutarFuncion('demo');
 });
 
-// 4️⃣ Botones radio: llamamos funciones existentes en Ropa3
-document.getElementById('radio1').addEventListener('change', () => {
-  if(document.getElementById('radio1').checked){
-    ejecutarFuncion('radio1'); // nombre real de función en Ropa3 para radio1
-  }
-});
-
-document.getElementById('radio2').addEventListener('change', () => {
-  if(document.getElementById('radio2').checked){
-    ejecutarFuncion('radio2'); // nombre real de función en Ropa3 para radio2
+// 4️⃣ Botón para mostrar/ocultar el contenedor de radio
+document.getElementById('btnToggleRadio').addEventListener('click', () => {
+  const contenedor = document.getElementById('radioContainer');
+  if(contenedor.style.display === 'none'){
+    contenedor.style.display = 'block';
+  } else {
+    contenedor.style.display = 'none';
   }
 });
 </script>
 
 </body>
-  </html>
+</html>
