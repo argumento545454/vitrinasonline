@@ -9,8 +9,15 @@
   body { font-family: Arial, sans-serif; text-align: center; margin-top: 20px; }
   button { padding: 10px 20px; font-size: 16px; cursor: pointer; margin: 5px; }
   #msgCarga { color: green; font-weight: bold; margin-top: 20px; }
-  #codigoRopa3 { text-align: left; margin: 20px auto; width: 90%; background: #f4f4f4; border: 1px solid #ccc; padding: 10px; white-space: pre-wrap; overflow-x: auto; max-height: 400px; }
-  #pantalla { margin-top: 20px; font-size: 16px; color: #333; border: 1px solid #ccc; padding: 10px; min-height: 50px; width: 90%; margin-left:auto; margin-right:auto; background:#fff; }
+  #codigoRopa3 { 
+    text-align: left; margin: 20px auto; width: 90%; 
+    background: #f4f4f4; border: 1px solid #ccc; padding: 10px; 
+    white-space: pre-wrap; overflow-x: auto; max-height: 400px; 
+  }
+  #pantalla { margin-top: 20px; font-size: 16px; color: #333; 
+    border: 1px solid #ccc; padding: 10px; min-height: 50px; width: 90%; 
+    margin-left:auto; margin-right:auto; background:#fff; 
+  }
 </style>
 </head>
 <body>
@@ -24,53 +31,45 @@
 <div id="pantalla"></div>
 
 <script>
-// 1️⃣ Cargar Ropa3 desde la misma carpeta
-let ropa3Text = '';
-fetch('carr_54_85_r3_cuadritos_size.html')
-  .then(response => {
-    if (!response.ok) throw new Error('Error al cargar Ropa3: ' + response.status);
-    return response.text();
-  })
-  .then(text => {
-    ropa3Text = text;
-    localStorage.setItem('ropa3', text);
+// 1️⃣ Guardamos la Ropa3 en memoria (ya la tenemos)
+let ropa3Text = localStorage.getItem('ropa3') || '';
+if(ropa3Text){
+  document.getElementById('codigoRopa3').textContent = ropa3Text;
+  const msg = document.getElementById('msgCarga');
+  msg.textContent = 'Ropa3 cargada correctamente en navegador';
+  setTimeout(() => { msg.textContent = ''; }, 5000);
+}
 
-    // Mostrar mensaje por 5 segundos
-    const msg = document.getElementById('msgCarga');
-    msg.textContent = 'Ropa3 cargada correctamente en navegador';
-    setTimeout(() => { msg.textContent = ''; }, 5000);
-
-    // Mostrar todo el código de Ropa3
-    document.getElementById('codigoRopa3').textContent = ropa3Text;
-
-    // ⚡ Ejecutar todo el código de Ropa3 en memoria para definir funciones globales
-    try {
-      new Function(ropa3Text)(); 
-      console.log('Ropa3 ejecutado en memoria, funciones disponibles globalmente');
-    } catch(e){
-      console.error('Error ejecutando Ropa3:', e);
-    }
-  })
-  .catch(err => {
-    console.error(err);
-    document.getElementById('msgCarga').textContent = 'Error cargando Ropa3: ' + err.message;
-  });
-
-// 2️⃣ Eventos de botones
-document.getElementById('btnTutorial').addEventListener('click', () => {
-  if(typeof tutorial === 'function'){
-    tutorial(); // Ejecuta la función global de Ropa3
-  } else {
-    document.getElementById('pantalla').textContent = 'Tutorial no disponible';
+// 2️⃣ Función para ejecutar cualquier función de Ropa3 bajo demanda
+function ejecutarFuncion(nombreFuncion){
+  if(!ropa3Text){
+    console.warn('Ropa3 no cargado');
+    return;
   }
+
+  // Creamos un Function que recibe el div pantalla
+  const funcScript = `
+    const pantallaDiv = document.getElementById('pantalla');
+    ${ropa3Text}
+    if(typeof ${nombreFuncion}==='function'){ ${nombreFuncion}(); } 
+    else { pantallaDiv.textContent = '${nombreFuncion} no disponible'; }
+  `;
+  
+  try{
+    new Function(funcScript)();
+  }catch(e){
+    console.error('Error ejecutando', nombreFuncion, e);
+    document.getElementById('pantalla').textContent = nombreFuncion + ' no disponible';
+  }
+}
+
+// 3️⃣ Eventos de botones
+document.getElementById('btnTutorial').addEventListener('click', () => {
+  ejecutarFuncion('tutorial');
 });
 
 document.getElementById('btnDemo').addEventListener('click', () => {
-  if(typeof demo === 'function'){
-    demo(); // Ejecuta la función global de Ropa3
-  } else {
-    document.getElementById('pantalla').textContent = 'Demo no disponible';
-  }
+  ejecutarFuncion('demo');
 });
 </script>
 
