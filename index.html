@@ -5,36 +5,43 @@
 <title>index_html_02_VitrinasOnline</title>
 
 
+
 <style>
   body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
   button { padding: 10px 20px; font-size: 16px; cursor: pointer; margin: 5px; }
+  #msgCarga { color: green; font-weight: bold; margin-top: 20px; }
 </style>
 </head>
 <body>
 
 <h1>Vitrinas Online</h1>
 <button id="btnTutorial">Tutorial</button>
-<button id="btnDemo">Demo</button> <!-- ejemplo de otro botón -->
-<p id="msgCarga" style="color: green; font-weight: bold;"></p> <!-- mensaje de carga -->
+<button id="btnDemo">Demo</button>
+
+<!-- Mensaje de carga -->
+<p id="msgCarga"></p>
 
 <script>
-// 1?? Solicitar Ropa3 desde GitHub
-let ropa3Text = ''; // aquí se guardará el texto de ropa3
+// 1ï¸âƒ£ Solicitar Ropa3 desde GitHub
+let ropa3Text = '';
 fetch('https://raw.githubusercontent.com/tuUsuario/tuRepositorio/main/carr_54_85_r3_cuadritos_size.html')
   .then(response => response.text())
   .then(text => {
     ropa3Text = text;
     localStorage.setItem('ropa3', text);
-    // mensaje de confirmación
-    document.getElementById('msgCarga').textContent = 'Ropa3 cargada correctamente en navegador';
+    // mostrar mensaje en pantalla
+    const msg = document.getElementById('msgCarga');
+    msg.textContent = 'Ropa3 cargada correctamente en navegador';
     console.log('Ropa3 cargada correctamente en navegador');
+    // desaparecer despuÃ©s de 5 segundos
+    setTimeout(() => { msg.textContent = ''; }, 5000);
   })
   .catch(err => console.error('Error cargando Ropa3 desde GitHub:', err));
 
-// 2?? Función para ejecutar fragmentos por nombre
+// 2ï¸âƒ£ FunciÃ³n para ejecutar fragmentos por nombre
 function ejecutarFuncion(nombreFuncion){
   if(!ropa3Text){
-    console.warn('Ropa3 aún no cargado');
+    console.warn('Ropa3 aÃºn no cargado');
     return;
   }
   const regex = new RegExp('function\\s+' + nombreFuncion + '\\s*\\(\\)\\s*{([\\s\\S]*?)}');
@@ -44,17 +51,17 @@ function ejecutarFuncion(nombreFuncion){
     const func = new Function(funcBody);
     func();
   } else {
-    console.warn('Función', nombreFuncion, 'no encontrada en Ropa3');
+    console.warn('FunciÃ³n', nombreFuncion, 'no encontrada en Ropa3');
   }
 }
 
-// 3?? Eventos de botones
+// 3ï¸âƒ£ Eventos de botones
 document.getElementById('btnTutorial').addEventListener('click', () => {
   ejecutarFuncion('tutorial');
 });
 
 document.getElementById('btnDemo').addEventListener('click', () => {
-  ejecutarFuncion('demo'); // ejemplo de otra función que puede estar en Ropa3
+  ejecutarFuncion('demo');
 });
 </script>
 
