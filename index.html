@@ -10,87 +10,30 @@
 <style>
   body { font-family: Arial, sans-serif; text-align: center; margin-top: 20px; }
   button { padding: 10px 20px; font-size: 16px; cursor: pointer; margin: 5px; }
-  #msgCarga { color: green; font-weight: bold; margin-top: 20px; }
-  #codigoRopa3 { 
-    text-align: left; margin: 20px auto; width: 90%; 
-    background: #f4f4f4; border: 1px solid #ccc; padding: 10px; 
-    white-space: pre-wrap; overflow-x: auto; max-height: 400px; 
-  }
-  #pantalla { margin-top: 20px; font-size: 16px; color: #333; 
-    border: 1px solid #ccc; padding: 10px; min-height: 50px; width: 90%; 
-    margin-left:auto; margin-right:auto; background:#fff; 
-  }
-  .radio-container { margin-top: 20px; display: none; } /* inicialmente oculto */
+  #radioContainer { margin-top: 20px; display: none; }
 </style>
 </head>
 <body>
 
 <h1>Vitrinas Online</h1>
-<button id="btnTutorial">Tutorial</button>
-<button id="btnDemo">Demo</button>
 <button id="btnToggleRadio">Mostrar/Ocultar Radio</button>
 
-<!-- Contenedor de radio, que se mostrará u ocultará -->
-<div class="radio-container" id="radioContainer">
-  <p>Contenido del Radio (Ropa3)</p>
+<!-- Contenedor de radio -->
+<div id="radioContainer">
+  <audio controls>
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    Tu navegador no soporta el elemento de audio.
+  </audio>
 </div>
 
-<p id="msgCarga"></p>
-<pre id="codigoRopa3"></pre>
-<div id="pantalla"></div>
-
 <script>
-// 1️⃣ Tomamos la Ropa3 ya en memoria
-let ropa3Text = localStorage.getItem('ropa3') || '';
-if(ropa3Text){
-  document.getElementById('codigoRopa3').textContent = ropa3Text;
-  const msg = document.getElementById('msgCarga');
-  msg.textContent = 'Ropa3 cargada correctamente en navegador';
-  setTimeout(() => { msg.textContent = ''; }, 5000);
-}
-
-// 2️⃣ Función que ejecuta cualquier función que exista en Ropa3
-function ejecutarFuncion(nombreFuncion){
-  if(!ropa3Text){
-    console.warn('Ropa3 no cargado');
-    return;
-  }
-
-  const funcScript = `
-    const pantallaDiv = document.getElementById('pantalla');
-    ${ropa3Text}
-    try {
-      if(typeof ${nombreFuncion}==='function'){ ${nombreFuncion}(); } 
-      else { pantallaDiv.textContent = '${nombreFuncion} no disponible'; }
-    } catch(e) {
-      pantallaDiv.textContent = '${nombreFuncion} falló: '+e.message;
-    }
-  `;
-  
-  try{
-    new Function(funcScript)();
-  }catch(e){
-    console.error('Error ejecutando', nombreFuncion, e);
-    document.getElementById('pantalla').textContent = nombreFuncion + ' fallo: ' + e.message;
-  }
-}
-
-// 3️⃣ Botones Tutorial y Demo
-document.getElementById('btnTutorial').addEventListener('click', () => {
-  ejecutarFuncion('tutorial');
-});
-
-document.getElementById('btnDemo').addEventListener('click', () => {
-  ejecutarFuncion('demo');
-});
-
-// 4️⃣ Botón para mostrar/ocultar el contenedor de radio
+// Botón para mostrar/ocultar el radio
 document.getElementById('btnToggleRadio').addEventListener('click', () => {
-  const contenedor = document.getElementById('radioContainer');
-  if(contenedor.style.display === 'none'){
-    contenedor.style.display = 'block';
+  const cont = document.getElementById('radioContainer');
+  if (cont.style.display === 'none') {
+    cont.style.display = 'block'; // mostrar el radio
   } else {
-    contenedor.style.display = 'none';
+    cont.style.display = 'none'; // ocultar el radio
   }
 });
 </script>
