@@ -2,14 +2,25 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>index_html_02_VitrinasOnline</title>
+<title>index_html_03_VitrinasOnline</title>
 
 
 
 <style>
-  body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
+  body { font-family: Arial, sans-serif; text-align: center; margin-top: 20px; }
   button { padding: 10px 20px; font-size: 16px; cursor: pointer; margin: 5px; }
   #msgCarga { color: green; font-weight: bold; margin-top: 20px; }
+  #codigoRopa3 { 
+    text-align: left; 
+    margin: 20px auto; 
+    width: 90%; 
+    background: #f4f4f4; 
+    border: 1px solid #ccc; 
+    padding: 10px; 
+    white-space: pre-wrap; 
+    overflow-x: auto; 
+    max-height: 400px;
+  }
 </style>
 </head>
 <body>
@@ -18,8 +29,10 @@
 <button id="btnTutorial">Tutorial</button>
 <button id="btnDemo">Demo</button>
 
-<!-- Mensaje de carga -->
 <p id="msgCarga"></p>
+
+<!-- Área para mostrar todo el código de Ropa3 -->
+<pre id="codigoRopa3"></pre>
 
 <script>
 // 1️⃣ Solicitar Ropa3 desde GitHub
@@ -29,12 +42,15 @@ fetch('https://raw.githubusercontent.com/tuUsuario/tuRepositorio/main/carr_54_85
   .then(text => {
     ropa3Text = text;
     localStorage.setItem('ropa3', text);
-    // mostrar mensaje en pantalla
+    
+    // mostrar mensaje en pantalla por 5 segundos
     const msg = document.getElementById('msgCarga');
     msg.textContent = 'Ropa3 cargada correctamente en navegador';
-    console.log('Ropa3 cargada correctamente en navegador');
-    // desaparecer después de 5 segundos
     setTimeout(() => { msg.textContent = ''; }, 5000);
+    
+    // mostrar todo el código en pantalla
+    document.getElementById('codigoRopa3').textContent = ropa3Text;
+    console.log('Ropa3 cargada y mostrada en pantalla');
   })
   .catch(err => console.error('Error cargando Ropa3 desde GitHub:', err));
 
