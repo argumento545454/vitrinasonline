@@ -18,7 +18,6 @@
     border: 1px solid #ccc; padding: 10px; min-height: 50px; width: 90%; 
     margin-left:auto; margin-right:auto; background:#fff; 
   }
-  /* Estilo para radio */
   .radio-container { margin-top: 20px; }
   .radio-label { font-size: 16px; margin-right: 15px; cursor: pointer; }
 </style>
@@ -32,10 +31,10 @@
 <!-- Botón Radio agregado -->
 <div class="radio-container">
   <label class="radio-label">
-    <input type="radio" name="opcionRopa3" id="radioOpcion1"> Opción 1
+    <input type="radio" name="opcionRopa3" id="radio1"> Opción Radio 1
   </label>
   <label class="radio-label">
-    <input type="radio" name="opcionRopa3" id="radioOpcion2"> Opción 2
+    <input type="radio" name="opcionRopa3" id="radio2"> Opción Radio 2
   </label>
 </div>
 
@@ -44,7 +43,7 @@
 <div id="pantalla"></div>
 
 <script>
-// 1️⃣ Guardamos la Ropa3 en memoria (ya la tenemos)
+// 1️⃣ Tomamos la Ropa3 ya en memoria
 let ropa3Text = localStorage.getItem('ropa3') || '';
 if(ropa3Text){
   document.getElementById('codigoRopa3').textContent = ropa3Text;
@@ -53,51 +52,55 @@ if(ropa3Text){
   setTimeout(() => { msg.textContent = ''; }, 5000);
 }
 
-// 2️⃣ Función para ejecutar cualquier función de Ropa3 bajo demanda
+// 2️⃣ Función que ejecuta cualquier función que exista en Ropa3
 function ejecutarFuncion(nombreFuncion){
   if(!ropa3Text){
     console.warn('Ropa3 no cargado');
     return;
   }
 
-  // Creamos un Function que recibe el div pantalla
+  // Creamos un Function que define todo Ropa3 en memoria y ejecuta la función solicitada
   const funcScript = `
     const pantallaDiv = document.getElementById('pantalla');
     ${ropa3Text}
-    if(typeof ${nombreFuncion}==='function'){ ${nombreFuncion}(); } 
-    else { pantallaDiv.textContent = '${nombreFuncion} no disponible'; }
+    try {
+      if(typeof ${nombreFuncion}==='function'){ ${nombreFuncion}(); } 
+      else { pantallaDiv.textContent = '${nombreFuncion} no disponible'; }
+    } catch(e) {
+      pantallaDiv.textContent = '${nombreFuncion} falló: '+e.message;
+    }
   `;
   
   try{
     new Function(funcScript)();
   }catch(e){
     console.error('Error ejecutando', nombreFuncion, e);
-    document.getElementById('pantalla').textContent = nombreFuncion + ' no disponible';
+    document.getElementById('pantalla').textContent = nombreFuncion + ' fallo: ' + e.message;
   }
 }
 
-// 3️⃣ Eventos de botones
+// 3️⃣ Botones Tutorial y Demo
 document.getElementById('btnTutorial').addEventListener('click', () => {
-  ejecutarFuncion('tutorial');
+  ejecutarFuncion('tutorial'); // usamos el nombre real de la función tutorial en Ropa3
 });
 
 document.getElementById('btnDemo').addEventListener('click', () => {
-  ejecutarFuncion('demo');
+  ejecutarFuncion('demo'); // usamos el nombre real de la función demo en Ropa3
 });
 
-// 4️⃣ Eventos para botón radio
-document.getElementById('radioOpcion1').addEventListener('change', () => {
-  if(document.getElementById('radioOpcion1').checked){
-    ejecutarFuncion('radioOpcion1'); // función correspondiente en Ropa3
+// 4️⃣ Botones radio: llamamos funciones existentes en Ropa3
+document.getElementById('radio1').addEventListener('change', () => {
+  if(document.getElementById('radio1').checked){
+    ejecutarFuncion('radio1'); // nombre real de función en Ropa3 para radio1
   }
 });
 
-document.getElementById('radioOpcion2').addEventListener('change', () => {
-  if(document.getElementById('radioOpcion2').checked){
-    ejecutarFuncion('radioOpcion2'); // función correspondiente en Ropa3
+document.getElementById('radio2').addEventListener('change', () => {
+  if(document.getElementById('radio2').checked){
+    ejecutarFuncion('radio2'); // nombre real de función en Ropa3 para radio2
   }
 });
 </script>
 
 </body>
-</html>
+  </html>
