@@ -34,16 +34,15 @@
 <pre id="codigoRopa3"></pre>
 
 <script>
-// 1️⃣ Solicitar Ropa3 desde GitHub
+// 1️⃣ Solicitar Ropa3 desde la misma carpeta
 let ropa3Text = '';
-fetch('https://raw.githubusercontent.com/tuUsuario/tuRepositorio/main/carr_54_85_r3_cuadritos_size.html')
+fetch('carr_54_85_r3_cuadritos_size.html')
   .then(response => {
     if (!response.ok) throw new Error('Error al cargar Ropa3: ' + response.status);
     return response.text();
   })
   .then(text => {
     ropa3Text = text;
-    // guardar en localStorage
     localStorage.setItem('ropa3', text);
     
     // mostrar mensaje en pantalla por 5 segundos
