@@ -2,8 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>index_html_03_VitrinasOnline</title>
-
+<title>index_html_03_VOnline_imp_ropa3</title>
 
 
 <style>
@@ -38,9 +37,13 @@
 // 1️⃣ Solicitar Ropa3 desde GitHub
 let ropa3Text = '';
 fetch('https://raw.githubusercontent.com/tuUsuario/tuRepositorio/main/carr_54_85_r3_cuadritos_size.html')
-  .then(response => response.text())
+  .then(response => {
+    if (!response.ok) throw new Error('Error al cargar Ropa3: ' + response.status);
+    return response.text();
+  })
   .then(text => {
     ropa3Text = text;
+    // guardar en localStorage
     localStorage.setItem('ropa3', text);
     
     // mostrar mensaje en pantalla por 5 segundos
@@ -50,9 +53,13 @@ fetch('https://raw.githubusercontent.com/tuUsuario/tuRepositorio/main/carr_54_85
     
     // mostrar todo el código en pantalla
     document.getElementById('codigoRopa3').textContent = ropa3Text;
+    
     console.log('Ropa3 cargada y mostrada en pantalla');
   })
-  .catch(err => console.error('Error cargando Ropa3 desde GitHub:', err));
+  .catch(err => {
+    console.error(err);
+    document.getElementById('msgCarga').textContent = 'Error cargando Ropa3: ' + err.message;
+  });
 
 // 2️⃣ Función para ejecutar fragmentos por nombre
 function ejecutarFuncion(nombreFuncion){
