@@ -4,8 +4,53 @@
 
 <!--2--> 
 <head>
+
 <meta charset="UTF-8">
 <title>DEMO_01_carrusel_50_01_02_carr_galeria</title> 
+
+
+<script type="text/javascript">
+
+  var sMensaje = 'Botón derecho deshabilitado';
+
+  function anularBotonDerecho(e) {
+
+    if (navigator.appName == 'Netscape'
+       && (e.which == 3 || e.which ==    2)){
+      alert(sMensaje);
+      return false;
+    } else if (navigator.appName == 'Microsoft Internet Explorer' 
+        && (event.button    == 2)) {
+      alert(sMensaje);
+    }
+  }
+
+  document.onmousedown=anularBotonDerecho;
+  document.oncontextmenu=new Function("return false");
+
+</script>
+
+
+
+
+<!--
+<script>
+  // Bloquear clic derecho sin mostrar alerta
+  document.addEventListener("contextmenu", function(e) {
+    e.preventDefault(); // Bloquea el menú contextual
+  });
+</script>
+-->
+
+<!--
+<script>
+  // Bloquear clic derecho mostrando alerta
+  document.addEventListener("contextmenu", function(e) {
+    alert("Right Click Disabled");
+    e.preventDefault(); // Bloquea el menú contextual
+  });
+</script>
+-->
 
 <!--2.1-->
 <style>
@@ -203,7 +248,7 @@ video button,
 /*2.2.15*/
 #videoContainer button:not(#btnCamara),
 
-/*2,2,16*/
+/*2.2.16*/
 #videoCamara + button {
   display: none !important;
   visibility: hidden !important;
@@ -264,12 +309,13 @@ crearFavicon();
 
 </head>
 
+
+
+
+
+
 <!--3-->
 <body>
-
-
-
-
 
 <!--3.1-->
 <div id="menuInicial">   <!--columna izquierda -->
@@ -419,7 +465,7 @@ foto cliente rotar
   <button id="btnCamara" style="margin-top:8px; padding:6px 12px; background:#444; color:white; border:none; border-radius:8px; cursor:pointer;">
     Encender Cámara
   </button>
--->
+  -->
 
 
   <button id="btnTomarFoto" style="margin-top:6px; padding:6px 12px; background:#007BFF; color:white; border:none; border-radius:8px; display:none; cursor:pointer;">
@@ -584,7 +630,7 @@ function generarCarrusel(urls) {
 
 
 
-//3.11.15
+//3.11.5
 function generarFranja(urls) {
   const franja = document.getElementById('franja');
   if (!franja) return console.error("No se encontró el contenedor franja");
@@ -1219,7 +1265,7 @@ window.addEventListener('load', iniciarCambioAutomatico);
 
   
 
-<!!--3.12--> 
+<!--3.12--> 
 <script>
   //CAMARA FOTO
 const videoCamara = document.getElementById('videoCamara');
@@ -1317,7 +1363,7 @@ window.addEventListener("load", iniciarRotacionCategorias);
 
 
 <!--3.14-->
-<!---->
+<!--Esperar a que el DOM esté listo-->
 <script>
 // Esperar a que el DOM esté listo
 document.addEventListener("DOMContentLoaded", () => {
@@ -1421,7 +1467,7 @@ document.addEventListener("DOMContentLoaded", () => {
 <!--  WhatsApp:
   <a href="https://wa.me/593985019054" target="_blank">bienvenido</a> -->
 
-  <a href="claves_VitrinasOnline.html">Ingresar</a>
+  <a href="http://localhost/mi_proyecto/claves_VitrinasOnline.html">Ingresar</a>
 
 </div>
 
@@ -1433,10 +1479,9 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 
 
+
 </body>
 </html>
-
-
 
 
 
