@@ -1,94 +1,38 @@
-<!DOCTYPE html>
-<html lang="es">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
 <head>
-<meta charset="UTF-8">
-<title>index_html_04_VOnline_tutorial</title>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>index_html_Deshabilit_bot�n_der_github</title>
+<script type="text/javascript">
 
+  var sMensaje = 'Bot�n derecho deshabilitado';
 
-<style>
-  body { font-family: Arial, sans-serif; text-align: center; margin-top: 20px; }
-  button { padding: 10px 20px; font-size: 16px; cursor: pointer; margin: 5px; }
-  #msgCarga { color: green; font-weight: bold; margin-top: 20px; }
-  #codigoRopa3 { text-align: left; margin: 20px auto; width: 90%; background: #f4f4f4; border: 1px solid #ccc; padding: 10px; white-space: pre-wrap; overflow-x: auto; max-height: 400px; }
-  #pantalla { margin-top: 20px; font-size: 16px; color: #333; border: 1px solid #ccc; padding: 10px; min-height: 50px; width: 90%; margin-left:auto;margin-right:auto; background:#fff; }
-</style>
+  function anularBotonDerecho(e) {
+
+    if (navigator.appName == 'Netscape'
+       && (e.which == 3 || e.which ==    2)){
+      alert(sMensaje);
+      return false;
+    } else if (navigator.appName == 'Microsoft Internet Explorer' 
+        && (event.button    == 2)) {
+      alert(sMensaje);
+    }
+  }
+
+  document.onmousedown=anularBotonDerecho;
+  document.oncontextmenu=new Function("return false");
+
+</script>
 </head>
 <body>
+<h1>Deshabilitar bot&oacute;n derecho</h1>
+<p>Ale, intenta darle con el bot&oacute;n derecho</p>
 
-<h1>Vitrinas Online</h1>
-<button id="btnTutorial">Tutorial</button>
-<button id="btnDemo">Demo</button>
 
-<p id="msgCarga"></p>
-<pre id="codigoRopa3"></pre>
-
-<!-- Área para mostrar resultados de botones -->
-<div id="pantalla"></div>
-
-<script>
-// 1️⃣ Solicitar Ropa3 desde la misma carpeta
-let ropa3Text = '';
-fetch('carr_54_85_r3_cuadritos_size.html')
-  .then(response => {
-    if (!response.ok) throw new Error('Error al cargar Ropa3: ' + response.status);
-    return response.text();
-  })
-  .then(text => {
-    ropa3Text = text;
-    localStorage.setItem('ropa3', text);
-
-    // mostrar mensaje por 5 segundos
-    const msg = document.getElementById('msgCarga');
-    msg.textContent = 'Ropa3 cargada correctamente en navegador';
-    setTimeout(() => { msg.textContent = ''; }, 5000);
-
-    // mostrar todo el código de Ropa3
-    document.getElementById('codigoRopa3').textContent = ropa3Text;
-    console.log('Ropa3 cargada y mostrada en pantalla');
-  })
-  .catch(err => {
-    console.error(err);
-    document.getElementById('msgCarga').textContent = 'Error cargando Ropa3: ' + err.message;
-  });
-
-// 2️⃣ Función para ejecutar fragmentos de Ropa3
-function ejecutarFuncion(nombreFuncion){
-  if(!ropa3Text){
-    console.warn('Ropa3 aún no cargado');
-    return;
-  }
-  const regex = new RegExp('function\\s+' + nombreFuncion + '\\s*\\(\\)\\s*{([\\s\\S]*?)}');
-  const match = ropa3Text.match(regex);
-  if(match){
-    const funcBody = match[1];
-    // usamos Function y devolvemos el resultado
-    const func = new Function('return (function(){'+funcBody+'})();');
-    return func();
-  } else {
-    console.warn('Función', nombreFuncion, 'no encontrada en Ropa3');
-    return null;
-  }
-}
-
-// 3️⃣ Eventos de botones
-document.getElementById('btnTutorial').addEventListener('click', () => {
-  const resultado = ejecutarFuncion('tutorial');
-  if(resultado) {
-    document.getElementById('pantalla').textContent = resultado;
-  } else {
-    document.getElementById('pantalla').textContent = 'Tutorial no disponible';
-  }
-});
-
-document.getElementById('btnDemo').addEventListener('click', () => {
-  const resultado = ejecutarFuncion('demo');
-  if(resultado) {
-    document.getElementById('pantalla').textContent = resultado;
-  } else {
-    document.getElementById('pantalla').textContent = 'Demo no disponible';
-  }
-});
-</script>
+<br><br>
+<hr>
+Art&iacute;culo disponible en: <a href="http://lineadecodigo.com/javascript/deshabilitar-el-boton-derecho/">http://lineadecodigo.com/javascript/deshabilitar-el-boton-derecho/</a><br/>
+<a href="http://lineadecodigo.com" title="Linea de Codigo">lineadecodigo.com</a>
 
 </body>
-  </html>
+</html>
