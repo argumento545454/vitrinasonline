@@ -2,10 +2,10 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>index_html_Deshabilit_botón_der_github</title>
+<title>index_html_Deshabilit_botÃ³n_der_github</title>
 <script type="text/javascript">
 
-  var sMensaje = 'Botón derecho deshabilitado';
+  var sMensaje = 'BotÃ³n derecho deshabilitado';
 
   function anularBotonDerecho(e) {
 
@@ -35,4 +35,5 @@ Art&iacute;culo disponible en: <a href="http://lineadecodigo.com/javascript/desh
 <a href="http://lineadecodigo.com" title="Linea de Codigo">lineadecodigo.com</a>
 
 </body>
+
 </html>
