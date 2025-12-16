@@ -6,6 +6,30 @@
 <title>carr_54_85_r3_cuadritos_size</title>
 
 
+<script type="text/javascript">
+
+  var sMensaje = 'Botón';
+  /*var sMensaje = 'Botón derecho deshabilitado'; */
+
+  function anularBotonDerecho(e) {
+
+    if (navigator.appName == 'Netscape'
+       && (e.which == 3 || e.which ==    2)){
+      alert(sMensaje);
+      return false;
+    } else if (navigator.appName == 'Microsoft Internet Explorer' 
+        && (event.button    == 2)) {
+      alert(sMensaje);
+    }
+  }
+
+  document.onmousedown=anularBotonDerecho;
+  document.oncontextmenu=new Function("return false");
+
+</script>
+
+
+
 <!--1-->
 
 <!--1.1-->
@@ -1874,8 +1898,8 @@ document.addEventListener("DOMContentLoaded", () => {
   style="
     position: fixed;
     bottom: 200px;
-    right: 40%; 
-    width: 200px;
+    right: 35%; 
+    width: 500px;
     padding: 10px;
     font-size: 36px;
     border-radius: 6px;
