@@ -11,13 +11,14 @@
 
 <script type="text/javascript">
 
-  var sMensaje = 'Botón derecho deshabilitado';
+  var sMensaje = 'Botón';
+  /*var sMensaje = 'Botón derecho deshabilitado'; */
 
   function anularBotonDerecho(e) {
 
     if (navigator.appName == 'Netscape'
        && (e.which == 3 || e.which ==    2)){
-      alert(sMensaje);
+      //alert(sMensaje);
       return false;
     } else if (navigator.appName == 'Microsoft Internet Explorer' 
         && (event.button    == 2)) {
