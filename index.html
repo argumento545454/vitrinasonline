@@ -5,6 +5,32 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>index Logo VitrinasOnline.com RESPONSIVE</title>
 
+
+<script type="text/javascript">
+
+  var sMensaje = 'Botón';
+  /*var sMensaje = 'Botón derecho deshabilitado'; */
+
+  function anularBotonDerecho(e) {
+
+    if (navigator.appName == 'Netscape'
+       && (e.which == 3 || e.which ==    2)){
+      //alert(sMensaje);
+      return false;
+    } else if (navigator.appName == 'Microsoft Internet Explorer' 
+        && (event.button    == 2)) {
+      alert(sMensaje);
+    }
+  }
+
+  document.onmousedown=anularBotonDerecho;
+  document.oncontextmenu=new Function("return false");
+
+</script>
+
+
+
+  
 <!-- ir a otra page luego de 3 segundos -->
 <meta http-equiv="refresh" content="3;URL='DEMO_01_carrusel_50_01_02_carr_galeria.html'">
 
@@ -154,6 +180,7 @@ function carrusel() {
 </body>
 
 </html>
+
 
 
 
