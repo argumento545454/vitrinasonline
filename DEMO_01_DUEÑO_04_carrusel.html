@@ -19,13 +19,15 @@
 
     .card { 
         background: white; 
-        padding: 30px; 
+        padding: 90px; 
         border-radius: 15px; 
         box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
         width: 100%; 
         max-width: 400px; 
         text-align: center; 
         z-index: 10; /* Asegura que el formulario esté al frente */
+		font-size:20px;
+		color:blue;
     }
 
     /* Contenedor principal del carrusel */
@@ -81,9 +83,11 @@
 
 <div class="card">
     <h1>VitrinasOnline.com</h1>
-    <p>Configura tu catalogo visual</p>
-    <input type="text" id="nombreEmpresa" placeholder="Nombre de tu empresa">
-    <input type="text" id="especialidad" placeholder="Qué vendes? (ej. Relojes)">
+    <h2>Configura tu catalogo visual</h2>
+    <input type="text" id="nombreEmpresa" placeholder="Name Empresa">
+	<br><br>
+    <input type="text" id="especialidad" placeholder="Que vende? (ej. Relojes)">
+	<br><br>
     <button onclick="buscarImagenes()">Generar Catalogo Aleatorio</button>
 </div>
 
@@ -155,4 +159,3 @@ function llenarCarrusel3D(imagenes) {
 </script>
 </body>
 </html>
-
