@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DEMO_01_DUE—O_04_carrusel</title>
+    <title>DEMO_01_DUE√ëO_04_carrusel</title>
 
 
 <style>
@@ -25,7 +25,7 @@
         width: 100%; 
         max-width: 400px; 
         text-align: center; 
-        z-index: 10; /* Asegura que el formulario estÈ al frente */
+        z-index: 10; /* Asegura que el formulario est√© al frente */
     }
 
     /* Contenedor principal del carrusel */
@@ -81,10 +81,10 @@
 
 <div class="card">
     <h1>Ropa3</h1>
-    <p>Configura tu cat·logo visual</p>
+    <p>Configura tu catalogo visual</p>
     <input type="text" id="nombreEmpresa" placeholder="Nombre de tu empresa">
-    <input type="text" id="especialidad" placeholder="QuÈ vendes? (ej. Relojes)">
-    <button onclick="buscarImagenes()">Generar Cat·logo Aleatorio</button>
+    <input type="text" id="especialidad" placeholder="Qu√© vendes? (ej. Relojes)">
+    <button onclick="buscarImagenes()">Generar Catalogo Aleatorio</button>
 </div>
 
 <h2 id="resultado-titulo"></h2>
@@ -96,7 +96,7 @@
 
 
 <script>
-// Tu API Key es v·lida, la usaremos directamente
+// Tu API Key es v√°lida, la usaremos directamente
 const MI_API_KEY = "oOudy2bdKxfLaNaQTINinjniBOg3WwfKBziq8R3qpQX7Dd3zOLFP023r"; 
 
 async function buscarImagenes() {
@@ -110,7 +110,7 @@ async function buscarImagenes() {
         return;
     }
 
-    titulo.innerText = `Cat·logo para: ${empresa}`;
+    titulo.innerText = `Cat√°logo para: ${empresa}`;
     track.innerHTML = ""; // Limpiar
 
     try {
@@ -122,7 +122,7 @@ async function buscarImagenes() {
         const data = await response.json();
 
         if (!data.photos || data.photos.length === 0) {
-            track.innerHTML = "<p>No se hallaron im·genes.</p>";
+            track.innerHTML = "<p>No se hallaron im√°genes.</p>";
             return;
         }
 
@@ -131,7 +131,7 @@ async function buscarImagenes() {
 
     } catch (error) {
         console.error("Error:", error);
-        track.innerHTML = "<p>Error de conexiÛn.</p>";
+        track.innerHTML = "<p>Error de conexi√≥n.</p>";
     }
 }
 
@@ -141,12 +141,12 @@ function llenarCarrusel3D(imagenes) {
     
     const total = imagenes.length;
     const angulo = 360 / total;
-    const radio = 250; // Radio del cÌrculo (ajustado para que no se encimen)
+    const radio = 250; // Radio del c√≠rculo (ajustado para que no se encimen)
 
     imagenes.forEach((src, i) => {
         const div = document.createElement('div');
         div.className = 'foto-item';
-        // Aplicamos la rotaciÛn individual y el desplazamiento hacia afuera (Z)
+        // Aplicamos la rotaci√≥n individual y el desplazamiento hacia afuera (Z)
         div.style.transform = `rotateY(${i * angulo}deg) translateZ(${radio}px)`;
         div.innerHTML = `<img src="${src}" alt="img">`;
         track.appendChild(div);
