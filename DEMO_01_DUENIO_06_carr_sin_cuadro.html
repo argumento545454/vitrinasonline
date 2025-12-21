@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DEMO_01_DUENIO_06_carr_sin_cuadro</title>
+
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VitrinasOnline - Vista Limpia</title>
+
+<style>
+    body { 
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+        background-color: #f0f2f5; 
+        display: flex; 
+        flex-direction: column; 
+        align-items: center; 
+        padding: 20px; 
+        overflow-x: hidden; 
+        margin: 0;
+        min-height: 100vh;
+    }
+
+    /* Contenedor del Formulario */
+    #contenedor-formulario {
+        width: 100%;
+        max-width: 500px;
+        z-index: 100;
+        transition: all 0.5s ease;
+    }
+
+    .card { 
+        background: yellow; 
+        padding: 20px; 
+        border-radius: 15px; 
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
+        text-align: center; 
+        color: blue;
+    }
+
+    /* Botón para regresar al menú (flotante) */
+    #btn-regresar {
+        display: none; /* Oculto por defecto */
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        padding: 10px 20px;
+        background: yellow;
+        color: blue;
+        border: 2px solid blue;
+        border-radius: 30px;
+        font-weight: bold;
+        cursor: pointer;
+        z-index: 1000;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    .menu-opciones { margin: 15px 0; display: flex; justify-content: center; gap: 10px; }
+    .btn-menu { padding: 10px 15px; cursor: pointer; border: 2px solid blue; background: white; color: blue; font-weight: bold; border-radius: 8px; }
+    .btn-menu.activo { background: blue; color: white; }
+    .seccion-input { display: none; margin-top: 15px; border-top: 1px solid rgba(0,0,255,0.1); padding-top: 15px; }
+    .seccion-input.visible { display: block; }
+    input[type="text"], input[type="file"] { padding: 8px; margin: 5px; border-radius: 5px; border: 1px solid #ccc; width: 80%; }
+    button.principal { padding: 10px 20px; background-color: blue; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; margin-top: 10px;}
+
+    /* Escena 3D mejorada para ocupar más espacio */
+    .escena-3d {
+        width: 100%;
+        height: 500px;
+        perspective: 1200px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 20px;
+    }
+
+    .carrusel-track-3d {
+        width: 200px;
+        height: 200px;
+        position: relative;
+        transform-style: preserve-3d;
+        animation: rotar 25s linear infinite;
+    }
+
+    .foto-item {
+        position: absolute;
+        width: 180px;
+        height: 180px;
+        left: 10px;
+        top: 10px;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+        border: 4px solid white;
+    }
+
+    .foto-item img { width: 100%; height: 100%; object-fit: cover; }
+
+    @keyframes rotar {
+        from { transform: rotateY(0deg); }
+        to { transform: rotateY(360deg); }
+    }
+</style>
+</head>
+<body>
+
+<button id="btn-regresar" onclick="alternarVista(true)">⚙️ Editar Vitrina</button>
+
+<div id="contenedor-formulario">
+    <div class="card">
+        <h1>VitrinasOnline.com</h1>
+        <div class="menu-opciones">
+            <button class="btn-menu" onclick="mostrarOpcion('pexels', this)">1. Pexels</button>
+            <button class="btn-menu" onclick="mostrarOpcion('local', this)">2. Mis Fotos</button>
+        </div>
+
+        <div id="opcion-pexels" class="seccion-input">
+            <input type="text" id="nombreEmpresa" placeholder="Nombre Empresa">
+            <input type="text" id="especialidad" placeholder="Producto">
+            <button class="principal" onClick="buscarImagenesPexels()">Ver Vitrina</button>
+        </div>
+
+        <div id="opcion-local" class="seccion-input">
+            <input type="text" id="nombreEmpresaLocal" placeholder="Nombre Empresa">
+            <input type="file" id="fotosPC" multiple accept="image/*">
+            <button class="principal" onClick="cargarImagenesLocales()">Ver Vitrina</button>
+        </div>
+    </div>
+</div>
+
+<h2 id="resultado-titulo" style="color: blue; margin-top: 20px; text-shadow: 1px 1px 2px white;"></h2>
+
+<div class="escena-3d">
+    <div class="carrusel-track-3d" id="trackFotos3D"></div>
+</div>
+
+<script>
+const MI_API_KEY = "oOudy2bdKxfLaNaQTINinjniBOg3WwfKBziq8R3qpQX7Dd3zOLFP023r";
+
+// Función para ocultar/mostrar formulario
+function alternarVista(mostrarFormulario) {
+    const formulario = document.getElementById('contenedor-formulario');
+    const btnRegresar = document.getElementById('btn-regresar');
+    
+    if (mostrarFormulario) {
+        formulario.style.display = "block";
+        btnRegresar.style.display = "none";
+    } else {
+        formulario.style.display = "none";
+        btnRegresar.style.display = "block";
+    }
+}
+
+function mostrarOpcion(tipo, btn) {
+    document.querySelectorAll('.btn-menu').forEach(b => b.classList.remove('activo'));
+    document.querySelectorAll('.seccion-input').forEach(s => s.classList.remove('visible'));
+    btn.classList.add('activo');
+    document.getElementById(`opcion-${tipo}`).classList.add('visible');
+}
+
+async function buscarImagenesPexels() {
+    const empresa = document.getElementById('nombreEmpresa').value;
+    const especialidad = document.getElementById('especialidad').value;
+    if (!especialidad || !empresa) return alert("Completa los datos");
+
+    document.getElementById('resultado-titulo').innerText = empresa;
+    
+    try {
+        const numPagina = Math.floor(Math.random() * 10) + 1;
+        const response = await fetch(`https://api.pexels.com/v1/search?query=${especialidad}&per_page=8&page=${numPagina}`, {
+            headers: { Authorization: MI_API_KEY }
+        });
+        const data = await response.json();
+        llenarCarrusel3D(data.photos.map(f => f.src.medium));
+        alternarVista(false); // <--- OCULTA EL FORMULARIO
+    } catch (e) { alert("Error de conexión"); }
+}
+
+function cargarImagenesLocales() {
+    const empresa = document.getElementById('nombreEmpresaLocal').value;
+    const inputFiles = document.getElementById('fotosPC');
+    if (!empresa || inputFiles.files.length === 0) return alert("Selecciona fotos y nombre");
+
+    document.getElementById('resultado-titulo').innerText = empresa;
+    const urlsLocales = Array.from(inputFiles.files).map(f => URL.createObjectURL(f));
+    
+    llenarCarrusel3D(urlsLocales);
+    alternarVista(false); // <--- OCULTA EL FORMULARIO
+}
+
+function llenarCarrusel3D(imagenes) {
+    const track = document.getElementById('trackFotos3D');
+    track.innerHTML = "";
+    const total = imagenes.length;
+    const radio = 480; 
+
+    imagenes.forEach((src, i) => {
+        const div = document.createElement('div');
+        div.className = 'foto-item';
+        div.style.transform = `rotateY(${(360/total) * i}deg) translateZ(${radio}px)`;
+        div.innerHTML = `<img src="${src}">`;
+        track.appendChild(div);
+    });
+}
+</script>
+</body>
+</html>
