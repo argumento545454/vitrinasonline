@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DEMO_01_DUEÑO_04_carrusel</title>
+    <title>DEMO_01_DUENIO_04_carrusel</title>
 
 
 <style>
@@ -18,14 +18,14 @@
     }
 
     .card { 
-        background: white; 
-        padding: 90px; 
+        background: yellow; 
+        padding: 10px; 
         border-radius: 15px; 
         box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
         width: 100%; 
         max-width: 400px; 
         text-align: center; 
-        z-index: 10; /* Asegura que el formulario esté al frente */
+        z-index: 10; /* Asegura que el formulario est� al frente */
 		font-size:20px;
 		color:blue;
     }
@@ -83,12 +83,12 @@
 
 <div class="card">
     <h1>VitrinasOnline.com</h1>
-    <h2>Configura tu catalogo visual</h2>
+    <!--<h2>Configura tu catalogo visual</h2>  -->
     <input type="text" id="nombreEmpresa" placeholder="Name Empresa">
-	<br><br>
+	<br>
     <input type="text" id="especialidad" placeholder="Que vende? (ej. Relojes)">
-	<br><br>
-    <button onclick="buscarImagenes()">Generar Catalogo Aleatorio</button>
+	<br>
+    <button onClick="buscarImagenes()">Generar Catalogo</button>
 </div>
 
 <h2 id="resultado-titulo"></h2>
@@ -100,7 +100,7 @@
 
 
 <script>
-// Tu API Key es válida, la usaremos directamente
+// Tu API Key es v�lida, la usaremos directamente
 const MI_API_KEY = "oOudy2bdKxfLaNaQTINinjniBOg3WwfKBziq8R3qpQX7Dd3zOLFP023r"; 
 
 async function buscarImagenes() {
@@ -114,7 +114,7 @@ async function buscarImagenes() {
         return;
     }
 
-    titulo.innerText = `Catálogo para: ${empresa}`;
+    titulo.innerText = `Catalogo para: ${empresa}`;
     track.innerHTML = ""; // Limpiar
 
     try {
@@ -126,7 +126,7 @@ async function buscarImagenes() {
         const data = await response.json();
 
         if (!data.photos || data.photos.length === 0) {
-            track.innerHTML = "<p>No se hallaron imágenes.</p>";
+            track.innerHTML = "<p>No se hallaron im�genes.</p>";
             return;
         }
 
@@ -135,7 +135,7 @@ async function buscarImagenes() {
 
     } catch (error) {
         console.error("Error:", error);
-        track.innerHTML = "<p>Error de conexión.</p>";
+        track.innerHTML = "<p>Error de conexi�n.</p>";
     }
 }
 
@@ -145,12 +145,12 @@ function llenarCarrusel3D(imagenes) {
     
     const total = imagenes.length;
     const angulo = 360 / total;
-    const radio = 250; // Radio del círculo (ajustado para que no se encimen)
+    const radio = 250; // Radio del c�rculo (ajustado para que no se encimen)
 
     imagenes.forEach((src, i) => {
         const div = document.createElement('div');
         div.className = 'foto-item';
-        // Aplicamos la rotación individual y el desplazamiento hacia afuera (Z)
+        // Aplicamos la rotaci�n individual y el desplazamiento hacia afuera (Z)
         div.style.transform = `rotateY(${i * angulo}deg) translateZ(${radio}px)`;
         div.innerHTML = `<img src="${src}" alt="img">`;
         track.appendChild(div);
