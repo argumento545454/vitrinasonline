@@ -6,6 +6,28 @@
     <title>DEMO_01_DUENIO_09_carr_izqDerVel</title>
 
 
+<script type="text/javascript">
+
+  var sMensaje = 'Botón';
+  /*var sMensaje = 'Botón derecho deshabilitado'; */
+
+  function anularBotonDerecho(e) {
+
+    if (navigator.appName == 'Netscape'
+       && (e.which == 3 || e.which ==    2)){
+      //alert(sMensaje);
+      return false;
+    } else if (navigator.appName == 'Microsoft Internet Explorer' 
+        && (event.button    == 2)) {
+      alert(sMensaje);
+    }
+  }
+
+  document.onmousedown=anularBotonDerecho;
+  document.oncontextmenu=new Function("return false");
+
+</script>
+    
 <style>
     body { 
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
@@ -185,4 +207,5 @@ function llenarCarrusel3D(imagenes) {
 }
 </script>
 </body>
+
 </html>
