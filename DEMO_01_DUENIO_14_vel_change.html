@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DEMO_01_DUENIO_14_vel_change</title>
+
+<script type="text/javascript">
+
+  var sMensaje = 'Botón';
+  /*var sMensaje = 'Botón derecho deshabilitado'; */
+
+  function anularBotonDerecho(e) {
+
+    if (navigator.appName == 'Netscape'
+       && (e.which == 3 || e.which ==    2)){
+      //alert(sMensaje);
+      return false;
+    } else if (navigator.appName == 'Microsoft Internet Explorer' 
+        && (event.button    == 2)) {
+      alert(sMensaje);
+    }
+  }
+
+  document.onmousedown=anularBotonDerecho;
+  document.oncontextmenu=new Function("return false");
+
+</script>
+
+
+
+
+<script type="text/javascript">
+    document.oncontextmenu = function(){ return false; };
+</script>
+
+<style>
+    body { 
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+        background-color: #f0f2f5; 
+        display: flex; flex-direction: column; align-items: center; 
+        padding: 20px; overflow-x: hidden; margin: 0; min-height: 100vh;
+    }
+
+    #contenedor-formulario {
+        width: 100%; max-width: 450px; z-index: 1000; margin-top: 50px;
+    }
+
+    .card { 
+        background: yellow; padding: 30px; border-radius: 20px; 
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; color: blue;
+    }
+
+    #btn-regresar {
+        display: none; position: fixed; top: 20px; right: 20px;
+        padding: 10px 25px; background: yellow; color: blue;
+        border: 2px solid blue; border-radius: 30px; font-weight: bold; cursor: pointer; z-index: 2000;
+    }
+
+    /* CUADRO DE VELOCIDAD MÓVIL */
+    #controles-duenio {
+        display: none; 
+        position: fixed; 
+        top: 600px; 
+        right: 20px; 
+        background: lightyellow;
+        padding: 12px;
+        border-radius: 15px;
+        border: 3px solid #f1f1d4;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        z-index: 3000;
+        cursor: move;
+        flex-direction: column;
+        align-items: center;
+        width: 130px;
+        touch-action: none;
+    }
+
+    .btn-ajuste {
+        background: blue; color: white; border: none; padding: 5px 12px;
+        border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 18px; margin: 2px;
+    }
+
+    #resultado-titulo { color: blue; margin-top: 20px; font-size: 35px; text-transform: uppercase; text-align: center; display: none; }
+    #resultado-especialidad { color: #333; font-size: 22px; font-style: italic; margin-bottom: 20px; text-align: center; display: none; }
+
+    .escena-3d { 
+        display: none; width: 100%; height: 600px; perspective: 1500px; 
+        justify-content: center; align-items: center; 
+    }
+    
+    .carrusel-track-3d {
+        width: 200px; height: 200px; position: relative; transform-style: preserve-3d;
+        animation: rotarVaiven 30s ease-in-out infinite;
+    }
+
+    .escena-3d:hover .carrusel-track-3d { animation-play-state: paused; }
+
+    .foto-item {
+        position: absolute; width: 200px; height: 200px; 
+        left: 0; top: 0; border-radius: 15px; 
+        overflow: hidden; box-shadow: 0 8px 25px rgba(0,0,0,0.5); 
+        border: 5px solid white; backface-visibility: hidden;
+        transition: transform 0.4s ease-out;
+    }
+
+    .foto-item:hover { border-color: blue; z-index: 9999; }
+    .foto-item img { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+
+    @keyframes rotarVaiven {
+        0% { transform: rotateY(0deg); }
+        50% { transform: rotateY(360deg); }
+        100% { transform: rotateY(0deg); }
+    }
+
+    input[type="text"], input[type="file"] { padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #ccc; width: 90%; }
+    button.principal { padding: 15px 30px; background-color: blue; color: white; border: none; border-radius: 10px; cursor: pointer; width: 100%; font-weight: bold; }
+</style>
+</head>
+<body>
+
+<button id="btn-regresar" onClick="location.reload()">⚙️ Nueva Vitrina</button>
+
+<div id="contenedor-formulario">
+    <div class="card">
+        <h1>VitrinasOnline.com</h1>
+        <input type="text" id="nombreEmpresa" placeholder="Nombre Empresa">
+        <input type="text" id="Especialidad" placeholder="Especialidad">
+        <input type="file" id="fotosPC" multiple accept="image/*">
+        
+        <div style="text-align:left; margin:15px 0;">
+            <label>Velocidad Inicial: <span id="valorVelocidad">30</span></label>
+            <input type="range" id="sliderVelocidad" min="5" max="60" value="30" oninput="actualizarVelocidad(this.value)" style="width:100%">
+        </div>
+        <button class="principal" onClick="generarVitrina()">GENERAR VITRINA</button>
+    </div>
+</div>
+
+<h2 id="resultado-titulo"></h2>
+<h3 id="resultado-especialidad"></h3>
+
+<div id="controles-duenio">
+    <span style="font-weight:bold; color:blue; font-size: 14px;">Velocidad</span>
+    <div>
+        <button class="btn-ajuste" onclick="ajustarPaso(-5)">-</button>
+        <strong id="v-actual">30</strong>
+        <button class="btn-ajuste" onclick="ajustarPaso(5)">+</button>
+    </div>
+</div>
+
+<div class="escena-3d" id="escenaPrincipal">
+    <div class="carrusel-track-3d" id="trackFotos3D"></div>
+</div>
+
+<script>
+let velocidadActual = 30;
+
+// Sistema de arrastre del cuadro
+const panel = document.getElementById("controles-duenio");
+let isDragging = false;
+let offset = { x: 0, y: 0 };
+panel.onmousedown = (e) => { isDragging = true; offset.x = e.clientX - panel.offsetLeft; offset.y = e.clientY - panel.offsetTop; };
+document.onmousemove = (e) => { if (isDragging) { panel.style.left = (e.clientX - offset.x) + "px"; panel.style.top = (e.clientY - offset.y) + "px"; } };
+document.onmouseup = () => isDragging = false;
+
+function actualizarVelocidad(valor) {
+    velocidadActual = parseInt(valor);
+    document.getElementById('valorVelocidad').innerText = valor;
+    document.getElementById('v-actual').innerText = valor;
+    // Aplicamos la lógica inversa a la animación: a mayor número, más rápido (menos segundos de duración)
+    // El track usa (70 - velocidad) para que si el número es 60, la animación dure 10s (rápido)
+    let duracionReal = 70 - velocidadActual; 
+    document.getElementById('trackFotos3D').style.animationDuration = duracionReal + "s";
+}
+
+function ajustarPaso(cambio) {
+    let nuevaVel = velocidadActual + cambio;
+    if (nuevaVel < 10) nuevaVel = 10; 
+    if (nuevaVel > 60) nuevaVel = 60;
+    actualizarVelocidad(nuevaVel);
+}
+
+function generarVitrina() {
+    const empresa = document.getElementById('nombreEmpresa').value;
+    const inputFiles = document.getElementById('fotosPC');
+    if (!empresa || inputFiles.files.length === 0) return alert("Faltan datos.");
+
+    document.getElementById('contenedor-formulario').style.display = "none";
+    document.getElementById('btn-regresar').style.display = "block";
+    document.getElementById('controles-duenio').style.display = "flex";
+    document.getElementById('resultado-titulo').style.display = "block";
+    document.getElementById('resultado-especialidad').style.display = "block";
+    document.getElementById('escenaPrincipal').style.display = "flex";
+
+    document.getElementById('resultado-titulo').innerText = empresa;
+    document.getElementById('resultado-especialidad').innerText = document.getElementById('Especialidad').value;
+
+    const urls = Array.from(inputFiles.files).map(f => URL.createObjectURL(f));
+    const track = document.getElementById('trackFotos3D');
+    track.innerHTML = "";
+    
+    const total = urls.length;
+    const angulo = 360 / total;
+    const radio = Math.max(350, total * 50);
+
+    urls.forEach((src, i) => {
+        const div = document.createElement('div');
+        div.className = 'foto-item';
+        const transformBase = `rotateY(${angulo * i}deg) translateZ(${radio}px)`;
+        div.style.transform = transformBase;
+        div.onmouseenter = () => { div.style.transform = `${transformBase} scale(2.0)`; };
+        div.onmouseleave = () => { div.style.transform = transformBase; };
+        div.innerHTML = `<img src="${src}">`;
+        track.appendChild(div);
+    });
+    actualizarVelocidad(velocidadActual);
+}
+</script>
+</body>
+</html>
