@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>prog_61_12_img_TxtNameResol</title>
+</head>
+
+
+
+<body>
+
+    <div id="app-container" background="yellow" >
+        <h2 id="titulo-principal"  align="center" style="color: blue;">VitrinasOnline.com</h2>
+        <h4 id="titulo-principal" style="color: #2c3e50;">Etiquetado Imagen</h4>
+        
+        <div id="panel-controles">
+            <p style="font-size: 13px; color: #555; margin-bottom: 10px;">El nombre de la imagen, será el texto en la imagen.</p>
+            <p style="font-size: 13px; color: #555; margin-bottom: 10px;">Ej. Blusa 35 dólares - talla 44.jpg.</p>
+            
+            <input type="file" id="upload" accept="image/*" style="margin-bottom: 10px;">
+            
+            <div id="feedback-resolucion" style="display: none; padding: 10px; border-radius: 6px; font-size: 12px; margin-bottom: 10px; font-weight: bold;"></div>
+
+            <button id="btnGenerar" onClick="procesarImagen()">Generar Imagen con Texto</button>
+            <button id="btnDescargar" onClick="descargar()">Descargar Imagen</button>
+            
+            <button id="btnAyuda" onClick="toggleAyuda()" style="background-color: #7f8c8d; font-size: 11px; margin-top: 15px;">¿Falta de nitidez image? (Guía de Resolución)</button>
+        </div>
+
+        <div id="guia-resolucion" style="display: none; width: 340px; background: white; margin-top: 15px; padding: 15px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border: 1px solid #ddd;">
+            <h3 style="font-size: 14px; margin-top: 0; color: #27ae60;">Guía de Calidad Ropa3</h3>
+            <table style="width: 100%; font-size: 11px; border-collapse: collapse; text-align: left;">
+                <tr style="background: #f4f4f4;">
+                    <th style="padding: 5px; border: 1px solid #ddd;">Calidad</th>
+                    <th style="padding: 5px; border: 1px solid #ddd;">Resolución</th>
+                    <th style="padding: 5px; border: 1px solid #ddd;">Uso Ideal</th>
+                </tr>
+                <tr>
+                    <td style="padding: 5px; border: 1px solid #ddd;">Baja</td>
+                    <td style="padding: 5px; border: 1px solid #ddd;">Menos de 800px</td>
+                    <td style="padding: 5px; border: 1px solid #ddd;">No recomendada</td>
+                </tr>
+                <tr>
+                    <td style="padding: 5px; border: 1px solid #ddd;">Aceptable</td>
+                    <td style="padding: 5px; border: 1px solid #ddd;">800 x 800 px</td>
+                    <td style="padding: 5px; border: 1px solid #ddd;">Catálogos rápidos</td>
+                </tr>
+                <tr style="background: #eef9f2;">
+                    <td style="padding: 5px; border: 1px solid #ddd;"><b>Óptima</b></td>
+                    <td style="padding: 5px; border: 1px solid #ddd;"><b>1200 x 1200 px</b></td>
+                    <td style="padding: 5px; border: 1px solid #ddd;"><b>Redes Sociales / Web</b></td>
+                </tr>
+            </table>
+        </div>
+
+        <img id="resultado" alt="Vista previa">
+        <canvas id="canvas" style="display: none;"></canvas>
+    </div>
+
+    <script>
+        const aplicarEstilos = () => {
+            const s = document.body.style;
+            s.fontFamily = "Calibri, sans-serif";
+            s.display = "flex"; s.flexDirection = "column"; s.alignItems = "center";
+            s.backgroundColor = "#f4f4f4"; s.padding = "20px";
+
+            const panel = document.getElementById('panel-controles').style;
+            panel.backgroundColor = "white"; panel.padding = "25px";
+            panel.borderRadius = "12px"; panel.boxShadow = "0 4px 15px rgba(0,0,0,0.1)";
+            panel.width = "320px"; panel.textAlign = "center";
+
+            const btnS = (id, col) => {
+                const b = document.getElementById(id).style;
+                b.backgroundColor = col; b.color = "white"; b.padding = "14px";
+                b.width = "100%"; b.border = "none"; b.fontWeight = "bold"; b.cursor = "pointer";
+                b.marginTop = "8px"; b.borderRadius = "6px";
+            };
+            btnS('btnGenerar', '#27ae60');
+            btnS('btnDescargar', '#2980b9');
+            btnS('btnAyuda', '#7f8c8d');
+            document.getElementById('btnDescargar').style.display = "none";
+
+            const res = document.getElementById('resultado').style;
+            res.marginTop = "25px"; res.maxWidth = "95%";
+            res.border = "1px solid #ccc"; res.display = "none";
+        };
+
+        aplicarEstilos();
+
+        function toggleAyuda() {
+            const guia = document.getElementById('guia-resolucion');
+            guia.style.display = guia.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function procesarImagen() {
+            const input = document.getElementById('upload');
+            const feedback = document.getElementById('feedback-resolucion');
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d');
+            const imgPreview = document.getElementById('resultado');
+            
+            if (input.files && input.files[0]) {
+                const archivo = input.files[0];
+                const nombreTexto = archivo.name.split('.').slice(0, -1).join('.').replace(/_/g, " ").toUpperCase();
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = new Image();
+                    img.onload = function() {
+                        const originalW = img.width;
+                        
+                        // --- VALIDACIÓN PIXELS IMAGE EN TIEMPO REAL ---
+                        feedback.style.display = "block";
+                        if (originalW < 800) {
+                            feedback.style.backgroundColor = "#fff3cd";
+                            feedback.style.color = "#856404";
+                            feedback.innerHTML = `⚠️ Calidad Baja (${originalW}px).<br>Use iimages mayores de 800px para mayor nitidez.`;
+                        } else {
+                            feedback.style.backgroundColor = "#d4edda";
+                            feedback.style.color = "#155724";
+                            feedback.innerHTML = `✅ ¡Excelente resolución! (${originalW}px).`;
+                        }
+
+                        // MOTOR DE ESCALADO (Protección de Nitidez)
+                        const targetW = Math.max(originalW, 1200);
+                        const scale = targetW / originalW;
+                        const w = targetW;
+                        const h = img.height * scale;
+                        
+                        const altoPie = Math.round(h * 0.25);
+                        const fontSize = Math.round(w * 0.08);
+
+                        canvas.width = w;
+                        canvas.height = h + altoPie;
+
+                        ctx.fillStyle = "white";
+                        ctx.fillRect(0, 0, canvas.width, canvas.height);
+                        ctx.imageSmoothingEnabled = true;
+                        ctx.imageSmoothingQuality = 'high';
+                        ctx.drawImage(img, 0, 0, w, h);
+
+                        setTimeout(() => {
+                            ctx.fillStyle = "black";
+                            ctx.font = `bold ${fontSize}px Calibri, sans-serif`;
+                            ctx.textAlign = "center";
+                            ctx.fillText(nombreTexto, w / 2, h + (altoPie / 2) + (fontSize/3));
+
+                            imgPreview.src = canvas.toDataURL('image/png');
+                            imgPreview.style.display = "block";
+                            document.getElementById('btnDescargar').style.display = "block";
+                        }, 50);
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(archivo);
+            }
+        }
+
+        function descargar() {
+            const link = document.createElement('a');
+            link.download = 'Ropa3_Etiqueta.png';
+            link.href = document.getElementById('resultado').src;
+            link.click();
+        }
+    </script>
+</body>
+</html>
