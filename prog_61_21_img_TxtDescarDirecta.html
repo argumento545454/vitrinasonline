@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>prog_61_21_img_TxtDescarDirecta con su Nombre Original</title>
+    <style>
+        body { font-family: 'Times New Roman', serif; background-color: #1a1a1a; display: flex; flex-direction: column; align-items: center; padding: 40px; color: #fff; }
+        #contenedor-romano { background: #ffffff; padding: 30px; border-radius: 10px; text-align: center; max-width: 450px; color: #000; box-shadow: 0 0 30px rgba(255,255,255,0.1); }
+        h2 { border-bottom: 2px solid #8e44ad; padding-bottom: 10px; margin-top: 0; }
+        input[type="file"] { margin: 20px 0; width: 100%; }
+        button { background-color: #8e44ad; color: white; padding: 20px; width: 100%; border: none; font-weight: bold; cursor: pointer; font-size: 18px; text-transform: uppercase; border-radius: 5px; }
+        button:hover { background-color: #732d91; }
+        #resultado { margin-top: 25px; width: 100%; display: none; border: 1px solid #ddd; }
+    </style>
+</head>
+<body>
+
+    <div id="contenedor-romano">
+        <h2>ROPA3 - VICTORIA TOTAL</h2>
+        <p style="font-size: 14px; color: #666;">"Texto Completo": Blindado contra recortes de carrusel.</p>
+        
+        <input type="file" id="upload" accept="image/*">
+        <button onclick="generarTextoCompleto()">GENERAR Y DESCARGAR YA</button>
+
+        <img id="resultado" alt="Vista previa Ropa3">
+        <canvas id="canvas" style="display: none;"></canvas>
+    </div>
+
+    <script>
+        function generarTextoCompleto() {
+            const input = document.getElementById('upload');
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d');
+            const imgPreview = document.getElementById('resultado');
+            
+            if (!input.files[0]) return alert("Por favor, sube la imagen de Ropa3.");
+
+            const archivoOriginal = input.files[0];
+            const nombreLimpio = archivoOriginal.name.split('.').slice(0, -1).join('.').replace(/_/g, " ").toUpperCase();
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    // LIENZO CUADRADO HD (La base de la estabilidad romana)
+                    const size = 2000;
+                    canvas.width = size;
+                    canvas.height = size;
+
+                    ctx.fillStyle = "white";
+                    ctx.fillRect(0, 0, size, size);
+
+                    // --- POSICIÓN DE TEXTO COMPLETO (Estrategia Blindada) ---
+                    // Lo bajamos al 38% del alto total. Aquí es donde el carrusel 
+                    // NUNCA llega a recortar, incluso con zoom del 20%.
+                    const yTexto = size * 0.38; 
+                    
+                    ctx.fillStyle = "black";
+                    let fSize = Math.round(size * 0.055); 
+                    ctx.font = `bold ${fSize}px Arial, sans-serif`;
+                    ctx.textAlign = "center";
+                    ctx.textBaseline = "middle";
+
+                    // Restricción de ancho para que no se corte por los lados
+                    const anchoSeguro = size * 0.70; 
+                    if (ctx.measureText(nombreLimpio).width > anchoSeguro) {
+                        fSize = Math.floor(fSize * (anchoSeguro / ctx.measureText(nombreLimpio).width));
+                        ctx.font = `bold ${fSize}px Arial, sans-serif`;
+                    }
+                    ctx.fillText(nombreLimpio, size / 2, yTexto);
+
+                    // --- POSICIÓN DE LA PRENDA ---
+                    // La ponemos justo debajo, en el centro inferior
+                    const sImg = size * 0.42; 
+                    const ratio = img.width / img.height;
+                    let rW, rH;
+
+                    if (ratio > 1) { rW = sImg; rH = sImg / ratio; }
+                    else { rH = sImg; rW = sImg * ratio; }
+                    
+                    const yImagen = size * 0.65; 
+                    ctx.imageSmoothingEnabled = true;
+                    ctx.imageSmoothingQuality = 'high';
+                    ctx.drawImage(img, (size - rW) / 2, yImagen - (rH / 2), rW, rH);
+
+                    // DESCARGA AUTOMÁTICA E INMEDIATA
+                    const dataURL = canvas.toDataURL('image/png', 1.0);
+                    imgPreview.src = dataURL;
+                    imgPreview.style.display = "block";
+
+                    const link = document.createElement('a');
+                    link.download = archivoOriginal.name;
+                    link.href = dataURL;
+                    link.click();
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(archivoOriginal);
+        }
+    </script>
+</body>
+</html>
