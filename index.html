@@ -1,0 +1,188 @@
+<!DOCTYPE html> 
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>index  VO Logo</title>
+
+<script type="text/javascript">
+  var sMensaje = 'Bot�n';
+
+  function anularBotonDerecho(e) {
+    if (navigator.appName == 'Netscape' && (e.which == 3 || e.which == 2)){
+      return false;
+    } else if (navigator.appName == 'Microsoft Internet Explorer' && (event.button == 2)) {
+      alert(sMensaje);
+    }
+  }
+
+  document.onmousedown = anularBotonDerecho;
+  document.oncontextmenu = new Function("return false");
+</script>
+
+<!-- ir a otra page luego de 3 segundos -->
+<meta http-equiv="refresh" content="3;URL='mi_proyecto/DEMO_01_carrusel_50_01_02_carr_galeria.html'">
+
+<style>
+/* ==== ESTILO GENERAL ==== */
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: yellow;
+  font-family: 'Arial Black', sans-serif;
+  margin: 0;
+}
+
+/* ==== LOGO ==== */
+.logo {
+  position: relative;
+  font-size: clamp(192px, 72vw, 480px);
+  color: blue;
+  cursor: pointer;
+  transition: transform 0.5s ease, color 0.3s ease;
+  text-align: center;
+  line-height: 1;
+  margin-top: -10px;
+}
+
+/* ==== EFECTO ENTRADA AUTOM�TICO ==== */
+.logo {
+  animation: entradaLogo 1.2s ease-out 0.2s both;
+}
+
+@keyframes entradaLogo {
+  0% {
+    transform: scale(0.8) rotate(0deg);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.1) rotate(-5deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+.logo:hover {
+  transform: rotate(-5deg) scale(1.1);
+  color: #0078ff;
+}
+
+/* ==== SUBT�TULO ==== */
+.subtitulo {
+  position: relative;
+  display: block;
+  margin-top: 10px;
+  font-size: clamp(64px, 16vw, 112px);
+  font-family: Arial, sans-serif;
+  color: blue;
+  letter-spacing: 2px;
+}
+
+/* ==== EFECTO BRILLO ==== */
+.logo::after {
+  content: '';
+  position: absolute;
+  top: 0; 
+  left: 0;
+  width: 100%; 
+  height: 100%;
+  background: linear-gradient(120deg, khaki, rgba(255,255,255,0));
+  transform: translateX(-100%);
+  transition: transform 0.5s;
+}
+
+.logo:hover::after {
+  transform: translateX(100%);
+}
+
+/* ==== MEDIA QUERIES ==== */
+@media (max-width: 600px) {
+  body {
+    background: #fff8dc;
+  }
+  .logo {
+    font-size: 36vw;
+  }
+  .subtitulo {
+    font-size: 10vw;
+  }
+}
+
+@media (min-width: 601px) and (max-width: 1024px) {
+  .logo {
+    font-size: 24vw;
+  }
+  .subtitulo {
+    font-size: 7vw;
+  }
+}
+</style>
+
+<script>
+// === CREAR FAVICON: 2 C�RCULOS AZULES + "V" AZUL ===
+function crearFavicon() {
+  const canvas = document.createElement('canvas');
+  canvas.width = 168;
+  canvas.height = 168;
+  const ctx = canvas.getContext('2d');
+
+  // Fondo amarillo
+  ctx.fillStyle = 'yellow';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  // Azul
+  ctx.strokeStyle = '#0033A0';
+  ctx.fillStyle = '#0033A0';
+  ctx.lineWidth = 8;
+
+  const cx = canvas.width / 2;
+  const cy = canvas.height / 2;
+
+  // C�rculo exterior
+  ctx.beginPath();
+  ctx.arc(cx, cy, 64, 0, Math.PI * 2);
+  ctx.stroke();
+
+  // C�rculo interior
+  ctx.beginPath();
+  ctx.arc(cx, cy, 48, 0, Math.PI * 2);
+  ctx.stroke();
+
+  // Letra V (sin tocar c�rculos)
+  ctx.font = 'bold 80px Arial';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('V', cx, cy + 6);
+
+  // Crear favicon
+  const link = document.createElement('link');
+  link.rel = 'icon';
+  link.href = canvas.toDataURL('image/png');
+  document.head.appendChild(link);
+}
+
+crearFavicon();
+</script>
+
+</head>
+
+<body>
+
+  <div class="logo">
+    Vitrinas Online
+    <div class="subtitulo">Bienvenido a</div>
+    <div class="subtitulo">VitrinasOnline.com</div>
+  </div>
+
+<script>
+function carrusel() {
+  window.location.href = "DEMO_01_carrusel_50_01_02_carr_galeria.html";
+}
+</script>
+
+</body>
+</html>
